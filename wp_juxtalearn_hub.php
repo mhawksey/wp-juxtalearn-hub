@@ -54,10 +54,9 @@ if(!class_exists('JuxtaLearn_Hub'))
 			
 			require_once(sprintf("%s/shortcodes/shortcode.php", JUXTALEARN_HUB_PATH));
 			
+			require_once(sprintf("%s/shortcodes/custom_archive.php", JUXTALEARN_HUB_PATH));
 			require_once(sprintf("%s/shortcodes/example_meta.php", JUXTALEARN_HUB_PATH));
 			require_once(sprintf("%s/shortcodes/example_map.php", JUXTALEARN_HUB_PATH));
-			require_once(sprintf("%s/shortcodes/custom_archive.php", JUXTALEARN_HUB_PATH));
-			require_once(sprintf("%s/shortcodes/trickytopic_sankey.php", JUXTALEARN_HUB_PATH));
 			require_once(sprintf("%s/shortcodes/trickytopic_summary.php", JUXTALEARN_HUB_PATH));
 			require_once(sprintf("%s/shortcodes/subject_summary.php", JUXTALEARN_HUB_PATH));
 			
@@ -73,19 +72,9 @@ if(!class_exists('JuxtaLearn_Hub'))
 			require_once(sprintf("%s/post-types/teaching_activity.php", JUXTALEARN_HUB_PATH));
 			$Teaching_Activity_Template = new Teaching_Activity_Template();
 			
-			/* location depreciated
 			// Register custom post types - location
 			require_once(sprintf("%s/post-types/location.php", JUXTALEARN_HUB_PATH));
 			$Location_Template = new Location_Template();
-			*/
-			
-			// Register custom post types - location
-			require_once(sprintf("%s/post-types/location.php", JUXTALEARN_HUB_PATH));
-			$Location_Template = new Location_Template();
-			
-					
-			//require_once(sprintf("%s/post-types/policy.php", JUXTALEARN_HUB_PATH));
-			//$Policy_Template = new Policy_Template();
 			
 			// Initialize Pronamics Google Maps distro
 			if (!class_exists('Pronamic_Google_Maps_Maps')){
