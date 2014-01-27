@@ -129,10 +129,10 @@ if(!class_exists('Policy_Template'))
     			)
     		);
 			$args = JuxtaLearn_Hub::get_taxonomy_args("Sector","Sectors");
-			register_taxonomy( 'juxtalearn_hub_sector', array(self::POST_TYPE, 'example'), $args );
+			register_taxonomy( 'juxtalearn_hub_sector', array(self::POST_TYPE, 'student_problem'), $args );
 		
 			$args = JuxtaLearn_Hub::get_taxonomy_args("Country", "Countries");
-			register_taxonomy( 'juxtalearn_hub_country', array(self::POST_TYPE, 'example', 'location'), $args );
+			register_taxonomy( 'juxtalearn_hub_country', array(self::POST_TYPE, 'student_problem', 'location'), $args );
 			
 			$args = JuxtaLearn_Hub::get_taxonomy_args("Locale","Locales");
 			register_taxonomy( 'juxtalearn_hub_locale', array(self::POST_TYPE), $args );

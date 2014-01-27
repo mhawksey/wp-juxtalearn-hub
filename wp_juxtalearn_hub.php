@@ -53,24 +53,25 @@ if(!class_exists('JuxtaLearn_Hub'))
 			add_action('init', array(&$this, 'init'));
 			
 			require_once(sprintf("%s/shortcodes/shortcode.php", JUXTALEARN_HUB_PATH));
-			require_once(sprintf("%s/shortcodes/example_summary.php", JUXTALEARN_HUB_PATH));
+			
 			require_once(sprintf("%s/shortcodes/example_meta.php", JUXTALEARN_HUB_PATH));
-			require_once(sprintf("%s/shortcodes/location_meta.php", JUXTALEARN_HUB_PATH));
-			require_once(sprintf("%s/shortcodes/policy_meta.php", JUXTALEARN_HUB_PATH));
 			require_once(sprintf("%s/shortcodes/example_map.php", JUXTALEARN_HUB_PATH));
-			require_once(sprintf("%s/shortcodes/trickytopic_bars.php", JUXTALEARN_HUB_PATH));
-			require_once(sprintf("%s/shortcodes/trickytopic_archive.php", JUXTALEARN_HUB_PATH));
+			require_once(sprintf("%s/shortcodes/custom_archive.php", JUXTALEARN_HUB_PATH));
 			require_once(sprintf("%s/shortcodes/trickytopic_sankey.php", JUXTALEARN_HUB_PATH));
-			require_once(sprintf("%s/shortcodes/example_geomap.php", JUXTALEARN_HUB_PATH));
-			require_once(sprintf("%s/shortcodes/policy_geomap.php", JUXTALEARN_HUB_PATH));
+			require_once(sprintf("%s/shortcodes/trickytopic_summary.php", JUXTALEARN_HUB_PATH));
+			require_once(sprintf("%s/shortcodes/subject_summary.php", JUXTALEARN_HUB_PATH));
 			
 			// Register custom post types - trickytopic
 			require_once(sprintf("%s/post-types/trickytopic.php", JUXTALEARN_HUB_PATH));
 			$TrickyTopic_Template = new TrickyTopic_Template();
 			
-			// Register custom post types - example
-			require_once(sprintf("%s/post-types/example.php", JUXTALEARN_HUB_PATH));
-			$Example_Template = new Example_Template();
+			// Register custom post types - student_problem
+			require_once(sprintf("%s/post-types/student_problem.php", JUXTALEARN_HUB_PATH));
+			$Student_Problem_Template = new Student_Problem_Template();
+			
+			// Register custom post types - student_problem
+			require_once(sprintf("%s/post-types/teaching_activity.php", JUXTALEARN_HUB_PATH));
+			$Teaching_Activity_Template = new Teaching_Activity_Template();
 			
 			/* location depreciated
 			// Register custom post types - location
@@ -81,6 +82,7 @@ if(!class_exists('JuxtaLearn_Hub'))
 			// Register custom post types - location
 			require_once(sprintf("%s/post-types/location.php", JUXTALEARN_HUB_PATH));
 			$Location_Template = new Location_Template();
+			
 					
 			//require_once(sprintf("%s/post-types/policy.php", JUXTALEARN_HUB_PATH));
 			//$Policy_Template = new Policy_Template();
@@ -117,6 +119,8 @@ if(!class_exists('JuxtaLearn_Hub'))
 			
 			add_action('wp_ajax_get_sankey_data', array(&$this, 'get_sankey_data'));
 			add_action('wp_ajax_nopriv_get_sankey_data', array(&$this, 'get_sankey_data'));
+			
+			add_action( 'wp_head', array(&$this, 'show_current_query') );
 
 		   //$this->include_files();
 		} // END public function __construct
@@ -126,7 +130,19 @@ if(!class_exists('JuxtaLearn_Hub'))
     	 */
     	public function init()
     	{	
+			global $wp_roles;
+
+			if ( ! isset( $wp_roles ) )
+				$wp_roles = new WP_Roles();
+		
+		
+			//You can replace "administrator" with any other role "editor", "author", "contributor" or "subscriber"...
+			$wp_roles->roles['editor']['name'] = 'Teacher';
+			$wp_roles->role_names['editor'] = 'Teacher';  
+			$wp_roles->roles['subscriber']['name'] = 'Student';
+			$wp_roles->role_names['subscriber'] = 'Student'; 
 			
+			/*
 			add_rewrite_rule("^country/([^/]+)/policy/sector/([^/]+)/page/([0-9]+)?",'index.php?post_type=policy&juxtalearn_hub_country=$matches[1]&sector=$matches[2]&paged=$matches[3]','top');
 			add_rewrite_rule("^country/([^/]+)/policy/sector/([^/]+)?",'index.php?post_type=policy&juxtalearn_hub_country=$matches[1]&sector=$matches[2]','top');
 			
@@ -143,8 +159,7 @@ if(!class_exists('JuxtaLearn_Hub'))
 			add_rewrite_rule("^country/([^/]+)/example/(polarity|sector)/([^/]+)/page/([0-9]+)?",'index.php?post_type=example&juxtalearn_hub_country=$matches[1]&$matches[2]=$matches[3]&paged=$matches[4]','top');
 			add_rewrite_rule("^country/([^/]+)/example/(polarity|sector)/([^/]+)?",'index.php?post_type=example&juxtalearn_hub_country=$matches[1]&$matches[2]=$matches[3]','top');
 			
-			add_rewrite_rule("^country/([^/]+)/page/([0-9]+)?",'index.php?post_type=example&juxtalearn_hub_country=$matches[1]&paged=$matches[3]','top');
-			add_rewrite_rule("^country/([^/]+)?",'index.php?post_type=example&juxtalearn_hub_country=$matches[1]','top');
+
 					
 					
 			add_rewrite_rule("^example/polarity/([^/]+)/sector/([^/]+)/page/([0-9]+)?",'index.php?post_type=example&polarity=$matches[1]&sector=$matches[2]&paged=$matches[3]','top');
@@ -161,34 +176,73 @@ if(!class_exists('JuxtaLearn_Hub'))
 			
 			add_rewrite_rule("^trickytopic/([0-9]+)/([^/]+)/example/(polarity|sector)/([^/]+)/page/([0-9]+)?",'index.php?post_type=example&tt_id=$matches[1]&$matches[3]=$matches[4]&paged=$matches[5]','top');
 			add_rewrite_rule("^trickytopic/([0-9]+)/([^/]+)/example/(polarity|sector)/([^/]+)?",'index.php?post_type=example&tt_id=$matches[1]&$matches[3]=$matches[4]','top');
+			*/
 			
-			add_rewrite_rule("^trickytopic/([0-9]+)/([^/]+)/example/page/([0-9]+)?",'index.php?post_type=example&tt_id=$matches[1]&paged=$matches[2]','top');  
-			add_rewrite_rule("^trickytopic/([0-9]+)/([^/]+)/example/?",'index.php?post_type=example&tt_id=$matches[1]','top');
+			add_rewrite_rule("^country/([^/]+)/trickytopic/([0-9]+)/([^/]+)/([^/]+)/([0-9]+)/?",'index.php?post_type=$matches[4]&trickytopic_id=$matches[2]&juxtalearn_hub_country=$matches[1]&paged=$matches[5]','top');
+			add_rewrite_rule("^country/([^/]+)/trickytopic/([0-9]+)/([^/]+)/([^/]+)/?",'index.php?post_type=$matches[4]&trickytopic_id=$matches[2]&juxtalearn_hub_country=$matches[1]','top');
+			
+			add_rewrite_rule("^country/([^/]+)/trickytopic/([0-9]+)/([^/]+)/?",'index.php?post_type=tricky_topic&&p=$matches[2]&juxtalearn_hub_country=$matches[1]','top');
+			
+			add_rewrite_rule("^country/([^/]+)/trickytopic/page/([0-9]+)/?",'index.php?&post_type[]=tricky_topic&jutalearn_hub_country=$matches[1]&paged=$matches[3]','top');
+			add_rewrite_rule("^country/([^/]+)/trickytopic/?",'index.php?post_type=tricky_topic&juxtalearn_hub_country=$matches[1]','top');
+			
+			add_rewrite_rule("^country/([^/]+)/teaching_activity/page/([0-9]+)/?",'index.php?&post_type[]=teaching_activity&jutalearn_hub_country=$matches[1]&paged=$matches[3]','top');
+			add_rewrite_rule("^country/([^/]+)/teaching_activity/?",'index.php?post_type=teaching_activity&juxtalearn_hub_country=$matches[1]','top');
+			
+			add_rewrite_rule("^country/([^/]+)/education_level/([^/]+)/page/([0-9]+)/?",'index.php?post_type[]=student_problem&post_type[]=teaching_activity&juxtalearn_hub_country=$matches[1]&juxtalearn_education_level=$matches[2]&paged=$matches[3]','top');
+			add_rewrite_rule("^country/([^/]+)/education_level/([^/]+)/?",'index.php?post_type[]=student_problem&post_type[]=teaching_activity&juxtalearn_hub_country=$matches[1]&juxtalearn_hub_education_level=$matches[2]','top');
+			
+			add_rewrite_rule("^country/([^/]+)/subject/([^/]+)/page/([0-9]+)/?",'index.php?&post_type=trick_ytopic&jutalearn_hub_country=$matches[1]&juxtalearn_hub_subject=$matches[2]&paged=$matches[3]','top');
+			add_rewrite_rule("^country/([^/]+)/subject/([^/]+)/?",'index.php?post_type=tricky_topic&juxtalearn_hub_country=$matches[1]&juxtalearn_hub_subject=$matches[2]','top');
+			
+			add_rewrite_rule("^country/([^/]+)/student_problem/page/([0-9]+)/?",'index.php?&post_type=student_problem&jutalearn_hub_country=$matches[1]&paged=$matches[2]','top');
+			add_rewrite_rule("^country/([^/]+)/student_problem/?",'index.php?post_type=student_problem&juxtalearn_hub_country=$matches[1]','top');
+			
+			add_rewrite_rule("^country/([^/]+)/page/([0-9]+)?",'index.php?post_type[]=tricky_topic&post_type[]=student_problem&post_type[]=teaching_activity&juxtalearn_hub_country=$matches[1]&paged=$matches[3]','top');
+			add_rewrite_rule("^country/([^/]+)?",'index.php?post_type[]=tricky_topic&post_type[]=student_problem&post_type[]=teaching_activity&juxtalearn_hub_country=$matches[1]','top');
+			
+			add_rewrite_rule("^trickytopic/([0-9]+)/([^/]+)/([^/]+)/page/([0-9]+)?",'index.php?post_type=example&tt_id=$matches[1]&paged=$matches[2]','top');  
+			add_rewrite_rule("^trickytopic/([0-9]+)/([^/]+)/([^/]+)/?",'index.php?post_type=$matches[3]&trickytopic_id=$matches[1]','top');
 			  
 			add_rewrite_rule("^trickytopic/([0-9]+)/([^/]+)/page/([0-9]+)?",'index.php?post_type=trickytopic&p=$matches[1]&paged=$matches[2]','top');
-			add_rewrite_rule("^trickytopic/([0-9]+)/([^/]+)/?",'index.php?post_type=trickytopic&p=$matches[1]','top');
+			add_rewrite_rule("^trickytopic/([0-9]+)/([^/]+)/?",'index.php?post_type=tricky_topic&p=$matches[1]','top');
 		}
 		
 		public function juxtalearn_hub_queryvars( $qvars )
 		{
-		  $qvars[] = 'tt_id';
+		  $qvars[] = 'trickytopic_id';
 		  $qvars[] = 'polarity';
 		  $qvars[] = 'sector';
 		  return $qvars;
 		}
 		
+
+		function show_current_query() {
+			global $wp_query;
+		
+			if ( !isset( $_GET['q'] ) )
+				return;
+			echo '<textarea cols="50" rows="10">';
+			print_r( $wp_query );
+			echo '</textarea>';
+		}
 		public function juxtalearn_hub_query($query){
-			
-			if ( is_admin() || is_search() || isset($query->query_vars['facetious_post_type']))
+				
+			if ( isset($query->query_vars['facetious_post_type']))
 				return;
 			
-			if ( is_post_type_archive( 'trickytopic' ) && !isset( $query->query_vars['tt_id']) ) {
-				$query->set( 'orderby', 'title' );
-				$query->set( 'order', 'ASC' );
-				$query->set( 'posts_per_page', -1 );
+			if ( isset( $query->query_vars['trickytopic_id']) ) {
+				$meta_query = array();
+				$meta_query[] = array(
+									'key' => 'juxtalearn_hub_trickytopic_id',
+									'value' => $query->query_vars['trickytopic_id'],
+									'compare' => '='
+									);
+				$query->set( 'meta_query' ,$meta_query);
 				return;
 			} 
 			
+			/*
 			if( isset( $query->query_vars['tt_id'] ) || (is_post_type_archive( 'example' ) && $query->is_main_query())) {
 				$meta_query = array();
 				$tax_query = array('relation' => 'AND');
@@ -229,7 +283,9 @@ if(!class_exists('JuxtaLearn_Hub'))
 				$query->set( 'post_status', 'publish');
 				$query->parse_query();	
 				return;
-			}	
+			}
+			*/	
+			return;
 		}
 		
 		function add_hub_controller($controllers) {
@@ -285,19 +341,12 @@ if(!class_exists('JuxtaLearn_Hub'))
 			global $typenow;
 			global $wp_styles;
 			$scripts = array( 'jquery', 'post', 'jquery-ui-autocomplete');
-  			if ($typenow=='example') {
-	  			//wp_enqueue_script( 'pronamic_google_maps_site');
-				/*
-				wp_enqueue_style( 'leafletcss', 'http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css' );
-				wp_enqueue_style( 'leafletcss-ie8', "http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css", array( 'leafletcss' )  );
-    			$wp_styles->add_data( 'leafletcss-ie8', 'conditional', 'IE 8' );
-				wp_enqueue_script( 'leafletjs', 'http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js' );
-				*/
-				
+  			if ($typenow=='student_problem' || $typenow=='teaching_activity' || $typenow=='tricky_topic') {
+				wp_dequeue_style('jquery-ui-smoothness');
 				wp_enqueue_style( 'leafletcss', 'http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css' );
-				//wp_enqueue_style( 'leafletcss-ie8', "http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css", array( 'leafletcss' )  );
-    			//$wp_styles->add_data( 'leafletcss-ie8', 'conditional', 'IE 8' );
 				wp_enqueue_script( 'leafletjs', 'http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js?2' );
+				$scripts[] = 'jquery-ui-core';
+				$scripts[] = 'jquery-ui-tabs';
 			} 
 			if ($typenow=='location') {
 				$scripts[] = 'pronamic_google_maps_admin';
@@ -333,7 +382,7 @@ if(!class_exists('JuxtaLearn_Hub'))
 			wp_enqueue_style( 'juxtalearn_hub_style');
 		}
 		
-		public static function get_taxonomy_args($tax_single, $tax_plural){
+		public static function get_taxonomy_args($tax_single, $tax_plural, $custom_slug = false){
 			$labels = array(
 				'name'                => sprintf( _x( '%s', 'taxonomy general name', 'juxtalearn_hub' ), $tax_plural ),
 			    'singular_name'       => sprintf( _x( '%s', 'taxonomy singular name', 'juxtalearn_hub' ), $tax_single ),
@@ -353,9 +402,15 @@ if(!class_exists('JuxtaLearn_Hub'))
 				'hierarchical'          => false,
 				'labels'                => $labels,
 				'show_ui'               => true,
-				'show_admin_column'     => false,
+				'show_admin_column'     => true,
 				'query_var'             => true,
-				'rewrite'               => array( 'slug' => strtolower($tax_single)),
+				'rewrite'               => array( 'slug' => (!$custom_slug) ? strtolower($tax_single) : $custom_slug),
+				'capabilities' 			=> array(
+												'manage_terms' => 'activate_plugins',
+												'edit_terms' => 'activate_plugins',
+												'delete_terms' => 'activate_plugins',
+												'assign_terms' => 'activate_plugins'
+											),
 			);		
 		}
 
@@ -366,9 +421,10 @@ if(!class_exists('JuxtaLearn_Hub'))
 				$post_id = $post->ID;
 			}
 			$post['ID'] = $post_id;
+			$post['post_type'] = get_post_type($post_id);
 			foreach (get_post_custom($post_id) as $key => $value) {
 				if (strpos($key, 'juxtalearn_hub') !== 0) continue;
-				$key = substr($key, 13);
+				$key = substr($key, 15);
 				$post[$key] = @unserialize($value[0]) ? @unserialize($value[0]) : $value[0];
 			}
 			$taxonomies = get_object_taxonomies(get_post_type($post_id), 'objects');
@@ -377,7 +433,7 @@ if(!class_exists('JuxtaLearn_Hub'))
 				if (strpos($taxonomy_id, 'juxtalearn_hub') !== 0) continue;
 				$value = wp_get_object_terms($post_id, $taxonomy_id);
 				
-				$taxonomy_id = substr($taxonomy_id, 13);
+				$taxonomy_id = substr($taxonomy_id, 15);
 				$taxonomy_slug = $taxonomy_id."_slug";
 				$name = array();
 				$slug = array();
@@ -406,8 +462,9 @@ if(!class_exists('JuxtaLearn_Hub'))
 			$links = array();
 			$markers = array();
 			$nodesList = array();
+			$posttypes = array('student_problem','teaching_activity');
 			
-			$args = array('post_type' => 'example', // my custom post type
+			$args = array('post_type' => $posttypes, // my custom post type
 			   'posts_per_page' => -1,
 			   'post_status' => 'publish',
 			   'fields' => 'ids'
@@ -421,48 +478,57 @@ if(!class_exists('JuxtaLearn_Hub'))
 			}
 			$posts = JuxtaLearn_Hub::add_terms(get_posts($args));
 			
-			$polarities = get_terms('juxtalearn_hub_polarity', 'hide_empty=0');
-			$trickytopics = get_posts(array('post_type' => 'trickytopic', // my custom post type
+			//$polarities = get_terms('juxtalearn_hub_polarity', 'hide_empty=0');
+			$trickytopics = get_posts(array('post_type' => 'tricky_topic', // my custom post type
 										   'posts_per_page' => -1,
 										   'post_status' => 'publish',
 										   'orderby' => 'title',
 										   'order' => 'ASC',
 										   'fields' => 'ids'));
-			$sectors = get_terms('juxtalearn_hub_sector', 'hide_empty=0');
+			
+			$sectors = get_terms('juxtalearn_hub_education_level', 'hide_empty=0');
+			$sectors[] = (object) array('slug' => '',
+							   			'name' => 'No Level');
+										
 			if ($country_slug != "World"){
 				foreach ($posts as $post){
 					$markers[] = array("id" => $post['ID'],
 									   "name" => get_the_title($post['ID']),
 									   "url" => get_permalink($post['ID']),
-									   "lat" => get_post_meta($post['ID'], '_pronamic_google_maps_latitude', true ),
-									   "lng" => get_post_meta($post['ID'], '_pronamic_google_maps_longitude', true ),
-									   "sector" => $post['sector_slug'],
-									   "polarity" =>  $post['polarity_slug']);
+									   "lat" => get_post_meta($post['location_id'], '_pronamic_google_maps_latitude', true ),
+									   "lng" => get_post_meta($post['location_id'], '_pronamic_google_maps_longitude', true ),
+									   "sector" => $post['education_level_slug'],
+									   "polarity" =>  $post['post_type']);
 				}
 			}
 			
 			foreach($trickytopics as $trickytopic){
 				$hposts = JuxtaLearn_Hub::filterOptions($posts, 'trickytopic_id', $trickytopic);
-				$hposts_title = get_the_title($trickytopic);
+				//$hposts_title = get_the_title($trickytopic);
 				$base_link = ($country_slug != 'World') ? (site_url().'/country/'.$country_slug) : site_url();
-				$tt_link = $base_link . '/trickytopic/'.$trickytopic.'/'.basename(get_permalink($trickytopic));
-				$nodes[] = array("name" => $hposts_title, "url" => $tt_link, "id" => $trickytopic, "type" => "trickytopic" );
-				foreach ($polarities as $polarity){
-					$pposts = JuxtaLearn_Hub::filterOptions($hposts, 'polarity_slug', $polarity->slug);
-					if (empty($nodeList[$polarity->name])){
-						$nodes[] = array("name" => $polarity->name, "url" => $base_link."/example/polarity/".$polarity->slug, "id" => $polarity->slug, "type" => "polarity", "fill" => json_decode($polarity->description)->fill);
-						$nodeList[$polarity->name] = 1;
-					}
-					if (count($pposts) > 0) 
-						$links[] = array("source" => $hposts_title, "target" => $polarity->name, "value" => count($pposts));
-					foreach($sectors as $sector){
-						$sposts = JuxtaLearn_Hub::filterOptions($pposts, 'sector_slug', $sector->slug);
-						if (empty($nodeList[$sector->name])){
-							$nodes[] = array("name" => $sector->name, "url" => $base_link."/example/sector/".$sector->slug, "id" => $sector->slug, "type" => "sector", "fill" => json_decode($sector->description)->fill);
-							$nodeList[$sector->name] = 1;
+				$subject = wp_get_post_terms($trickytopic, 'juxtalearn_hub_subject');
+				if ($subject && empty($nodeList[$subject[0]->slug])){
+					$nodes[] = array("name" => $subject[0]->name, "url" => $base_link."/subject/".$subject[0]->slug, "id" => $subject[0]->slug, "type" => "trickytopic");
+					$nodeList[$subject[0]->slug] = 1;
+					//$tt_link = $base_link . '/trickytopic/'.$trickytopic.'/'.basename(get_permalink($trickytopic));
+					//$nodes[] = array("name" => $hposts_title, "url" => $tt_link, "id" => $trickytopic, "type" => "trickytopic" );
+					foreach ($posttypes as $posttype){
+						$pposts = JuxtaLearn_Hub::filterOptions($hposts, 'post_type', $posttype);
+						if (empty($nodeList[$posttype])){
+							$nodes[] = array("name" => ucwords(str_replace("_", " ", $posttype)), "url" => $base_link."/".$posttype, "id" => $posttype, "type" => "polarity");
+							$nodeList[$posttype] = 1;
 						}
-						if (count($sposts) > 0) 
-							$links[] = array("source" => $polarity->name, "target" => $sector->name, "value" => count($sposts), "data" => array("url" => "xxx"));		
+						if (count($pposts) > 0) 
+							$links[] = array("source" => $subject[0]->name, "target" => ucwords(str_replace("_", " ", $posttype)), "value" => count($pposts));
+						foreach($sectors as $sector){
+							$sposts = JuxtaLearn_Hub::filterOptions($pposts, 'education_level_slug', $sector->slug);
+							if (empty($nodeList[$sector->name])){
+								$nodes[] = array("name" => $sector->name, "url" => $base_link."/education_level/".$sector->slug, "id" => $sector->slug, "type" => "sector", );
+								$nodeList[$sector->name] = 1;
+							}
+							if (count($sposts) > 0) 
+								$links[] = array("source" => ucwords(str_replace("_", " ", $posttype)), "target" => $sector->name, "value" => count($sposts), "data" => array("url" => "xxx"));		
+						}
 					}
 				}
 			}	
@@ -529,7 +595,7 @@ if(!class_exists('JuxtaLearn_Hub'))
 		public static function activate()
 		{
 			flush_rewrite_rules();
-			update_option( 'Pronamic_Google_maps', array( 'active' => array( 'location' => true, 'example' => true, 'location' => true, 'policy' => true  ) ) );
+			update_option( 'Pronamic_Google_maps', array( 'active' => array( 'location' => true, 'student_problem' => true, 'teaching_activity' => true, 'location' => true, 'policy' => true  ) ) );
 			// Do nothing
 		} // END public static function activate
 	

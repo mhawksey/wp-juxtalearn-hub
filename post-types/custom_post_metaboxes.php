@@ -16,13 +16,14 @@
 				$style = "eh_$name";
 				$value = "";
 				$post_id = isset($post->ID) ? $post->ID : NULL;
-				if (isset($post)){
+				if (isset($post) && $option['save_as']){
 					if ($option['save_as'] == 'term'){
 						$value = wp_get_object_terms($post->ID, $name); 
 					} else {
 						$value = get_post_meta( $post->ID, $name, true );
 					}
 				}
+				
 			?>
 			
 			<div class="eh_input <?php echo $style; ?>">
@@ -44,6 +45,7 @@
 							id="<?php echo $name; ?>"
 							value="<?php echo htmlentities($value); ?>"
 						/>
+
 					<?php } else if ($option['type'] == 'date') { ?>
 						<input
 							class="date"
@@ -61,7 +63,7 @@
                             autocomplete="off"
 							name="<?php echo $name; ?>_field"
 							id="<?php echo $name; ?>_field"
-							value="<?php echo get_the_title($value); ?>"
+							value="<?php if ($value) { echo get_the_title($value);} ?>"
                             placeholder="Start typing a <?php echo $option['type'];?>"
 						/><?php if ($option['descr']){?>
                         <span class="description"><?php echo $option['descr'] ?></span>
@@ -167,6 +169,18 @@
 							id="<?php echo $name; ?>"
 							<?php if ($value) echo 'checked'; ?>
 						/>
+                     <?php } else if ($option['type'] == 'add_link') { ?>
+						<?php if (isset($_GET['post'])) { 
+								printf( __( '<a href="post-new.php?post_type=student_problem&tt_id=%s">Add an example</a>' ), $post_id );
+						} else {
+								echo "Save/Publish to add an example";	
+						}
+                        ?>
+                     <?php } else if ($option['type'] == 'add_another_link') { ?>
+						
+								<?php printf( __( '<a href="post-new.php?post_type=student_problem&tt_id=%s">Add another example</a>' ), $_GET['tt_id'] ); ?>
+						
+                        
 					<?php } else echo 'unknown option type '.$option['type']; ?>
 				</span>
                 </div>

@@ -14,15 +14,26 @@ font-weight:bold;
 text-align:center;	
 }
 .juxtalearn-box {
-width:48%;
 font-size:90%;
 text-align:left;	
 }
-.juxtalearn-box.pos {
+.juxtalearn-box table{
+margin-bottom:0px !important;	
+}
+.juxtalearn-box td.student_problem, .juxtalearn-box td.teaching_activity {
+	border-top:none;
+}
+.entry-content table {
+	border-bottom:none !important;
+}
+.juxtalearn-box td.student_problem {
+	border-right: 1px solid #CCC;	
+}
+.juxtalearn-box.teaching_activity {
 float:right;
 
 }
-.juxtalearn-box.neg{
+.juxtalearn-box.student_problem{
 float:left;
 width:47%;
 border-right: 1px #ccc inset;
@@ -155,5 +166,11 @@ text-align:left;
 
 blockquote {
   color: #8B4513 !important;
+}
+.subjectlist {
+	text-align:center;
+}
+.subjectlist li {
+	display: inline;
 }
 /*THEME-specific ends. */

@@ -1,15 +1,15 @@
 <?php
-if(!class_exists('Location_Template'))
+if(!class_exists('TaxonomyHelper_Template'))
 {
 	/**
 	 * A PostTypeTemplate class that provides 3 additional meta fields
 	 */
-	class Location_Template
+	class Taxonomy_Template
 	{
-		const POST_TYPE	= "location";
-		const ARCHIVE_SLUG = "location"; // use pluralized string if you want an archive page
-		const SINGULAR = "Location";
-		const PLURAL = "Locations";
+		const POST_TYPE	= "taxonomy_helper";
+		const ARCHIVE_SLUG = "taxonomy"; // use pluralized string if you want an archive page
+		const SINGULAR = "Taxonomy Helper";
+		const PLURAL = "Taxonomy Helper";
 		var $options = array();
 		
     	/**
@@ -20,8 +20,8 @@ if(!class_exists('Location_Template'))
     		// register actions
     		add_action('init', array(&$this, 'init'));
     		add_action('admin_init', array(&$this, 'admin_init'));
-			add_action('manage_edit-'.self::POST_TYPE.'_columns', array(&$this, 'columns'));
-			add_action('manage_'.self::POST_TYPE.'_posts_custom_column', array(&$this, 'column'),10 ,2);
+			//add_action('manage_edit-'.self::POST_TYPE.'_columns', array(&$this, 'columns'));
+			//add_action('manage_'.self::POST_TYPE.'_posts_custom_column', array(&$this, 'column'),10 ,2);
 			
 			JuxtaLearn_Hub::$post_types[] = self::POST_TYPE;
 			
@@ -42,6 +42,8 @@ if(!class_exists('Location_Template'))
 				'cb' => '<input type="checkbox" />',
 				'title' => __( self::SINGULAR ),
 				'juxtalearn_hub_country' => __( 'Country' ),
+				'juxtalearn_hub_sector' => __( 'Sector' ),
+				'juxtalearn_hub_locale' => __( 'Locale' ),
 				'author' => __( 'Author' ),
 				'date' => __( 'Date' )
 			);
@@ -57,6 +59,30 @@ if(!class_exists('Location_Template'))
 						echo __( 'Empty' );
 					else
 						printf( __( '%s' ), $location[0]->name  );
+					break;
+				case 'sector':
+					$sector = wp_get_object_terms( $post_id, $column);
+					if ( empty( $sector ) ){
+						echo __( 'Empty' );	
+					} else {
+						$out = array();
+						foreach ($sector as $s){
+							$out[] = $s->name;	
+						}
+						printf( __( '%s' ), implode(", ", $out ));
+					}
+					break;
+				case 'locale':
+					$locale = wp_get_object_terms( $post_id, $column);
+					if ( empty( $locale ) ){
+						echo __( 'Empty' );	
+					} else {
+						$out = array();
+						foreach ($locale as $l){
+							$out[] = $l->name;	
+						}
+						printf( __( '%s' ), implode(", ", $out ));
+					}
 					break;
 			default :
 				break;
@@ -88,37 +114,22 @@ if(!class_exists('Location_Template'))
 						'not_found_in_trash' => __(sprintf('No found in Trash%s', self::PLURAL)),
 					),
     				'public' => true,
-    				'description' => __("A location"),
-    				'supports' => array(
-    					'title', 'editor', 'excerpt', 'author', 
-    				),
-					'has_archive' => true,
-					'rewrite' => array(
-						'slug' => self::ARCHIVE_SLUG,
-						'with_front' => false,
-					),
+    				'description' => __("Taxonomy Helper"),
+    				'supports' => array('title'),
+					'has_archive' => false,
 					'menu_position' => 30,
-					'menu_icon' => JUXTALEARN_HUB_URL.'/images/icons/location.png',
+					'menu_icon' => JUXTALEARN_HUB_URL.'/images/icons/policy.png',
+					'capabilities' => array(
+						'edit_post'          => 'activate_plugins',
+						'read_post'          => 'activate_plugins',
+						'delete_post'        => 'activate_plugins',
+						'edit_posts'         => 'activate_plugins',
+						'edit_others_posts'  => 'activate_plugins',
+						'publish_posts'      => 'activate_plugins',
+						'read_private_posts' => 'activate_plugins'
+					),
     			)
     		);
-		
-			$args = JuxtaLearn_Hub::get_taxonomy_args("Country", "Countries");
-		
-			register_taxonomy( 'juxtalearn_hub_country', array(self::POST_TYPE, 'student_problem', 'teaching_activity', 'tricky_topic'), $args );
-			
-			$countries = get_terms( 'juxtalearn_hub_country', array( 'hide_empty' => false ) );
-			
-			// if no terms then lets add our terms
-			if( empty( $countries ) ){
-				$countries = $this->set_countries();
-				foreach( $countries as $country_code => $country_name ){
-					if( !term_exists( $country_name, 'juxtalearn_hub_country' ) ){
-						wp_insert_term( $country_name, 'juxtalearn_hub_country', array( 'slug' => $country_code ) );
-					}
-				}
-			}
-			
-			
     	}
 	
     	/**
@@ -152,21 +163,14 @@ if(!class_exists('Location_Template'))
     	 */
     	public function admin_init()
     	{			
+			$taxonomy_options = array();
 
-			$this->options = array_merge($this->options, array(
-				'country' => array(
-					'type' => 'select',
-					'save_as' => 'term',
-					'position' => 'side',
-					'label' => "Country",
-					'options' => get_terms('juxtalearn_hub_country', 'hide_empty=0'),
-					),
-				));
+			
 				
 				
 
 			// Add metaboxes
-    		add_action('add_meta_boxes', array(&$this, 'add_meta_boxes'));
+    		//add_action('add_meta_boxes', array(&$this, 'add_meta_boxes'));
     	} // END public function admin_init()
 			
 
@@ -177,14 +181,24 @@ if(!class_exists('Location_Template'))
     	{
 // Add this metabox to every selected post
     		add_meta_box( 
+    			sprintf('wp_juxtalearn_hub_%s_section', self::POST_TYPE),
+    			sprintf('%s Information', ucwords(str_replace("_", " ", self::POST_TYPE))),
+    			array(&$this, 'add_inner_meta_boxes'),
+    			self::POST_TYPE,
+				'normal',
+				'high'
+    	    );
+			
+    		add_meta_box( 
     			sprintf('wp_juxtalearn_hub_%s_side_section', self::POST_TYPE),
     			sprintf('%s Information', ucwords(str_replace("_", " ", self::POST_TYPE))),
     			array(&$this, 'add_inner_meta_boxes_side'),
     			self::POST_TYPE,
 				'side'
     	    );	
+			remove_meta_box('tagsdiv-juxtalearn_hub_sector',self::POST_TYPE,'side');
 			remove_meta_box('tagsdiv-juxtalearn_hub_country',self::POST_TYPE,'side');
-			
+			remove_meta_box('tagsdiv-juxtalearn_hub_locale',self::POST_TYPE,'side');			
     					
     	} // END public function add_meta_boxes()
 
@@ -193,6 +207,7 @@ if(!class_exists('Location_Template'))
 		 */		
 		public function add_inner_meta_boxes_side($post)
 		{		
+			wp_nonce_field(plugin_basename(__FILE__), 'juxtalearn_hub_nonce');
 			$sub_options = JuxtaLearn_Hub::filterOptions($this->options, 'position', 'side');
 			include(sprintf("%s/custom_post_metaboxes.php", dirname(__FILE__)));			
 		} // END public function add_inner_meta_boxes($post)

@@ -46,11 +46,12 @@ var path = sankey.link();
   var link = svg.append("g").selectAll(".linkpath")
 	  .data(graph.links)
 	 .enter()
+	 /*
 	 .append("svg:a")
 	  .attr("xlink:href", function(d) { 
 			  					var ev = (d.source.type == 'trickytopic') ? 'example' : '';
 								return d.source.url+ev+'/'+d.target.type+'/'+d.target.id; })
-	  .attr("class", "linkpath")
+	  .attr("class", "linkpath") */
 	  .sort(function(a, b) { return b.dy - a.dy; });
 			  
 			  // add the link titles

@@ -64,8 +64,8 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
 			} 
 			fclose($handle); 
 		} 
-	
-		$args = array('post_type' => 'example', // my custom post type
+		$posttypes = array('student_problem','teaching_activity');
+		$args = array('post_type' => $posttypes, // my custom post type
     				   'posts_per_page' => -1,
 					   'post_status' => 'publish',
 					   'fields' => 'ids'); // show all posts);
@@ -73,9 +73,10 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
 		$year = array();
 		
 		$posts = JuxtaLearn_Hub::add_terms(get_posts($args));
-		$countries = get_terms('juxtalearn_hub_country', array('post_types' =>array('example')));
-		$polarities = get_terms('juxtalearn_hub_polarity');
-		$args['post_type'] = 'trickytopic';
+		
+		$countries = get_terms('juxtalearn_hub_country', array('post_types' => $posttypes ));
+		//$polarities = get_terms('juxtalearn_hub_polarity');
+		$args['post_type'] = 'tricky_topic';
 		$trickytopic = get_posts($args);
 
 		
@@ -93,17 +94,17 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
 		foreach ($countries as $country){
 			$cposts = JuxtaLearn_Hub::filterOptions($posts, 'country_slug' , $country->slug);
 			$totals = array();
-			foreach ($polarities as $polarity){
-				$pposts = JuxtaLearn_Hub::filterOptions($cposts, 'polarity_slug', $polarity->slug);
-				$totals[$polarity->slug] = count($pposts);
+			foreach ($posttypes  as $posttype){
+				$pposts = JuxtaLearn_Hub::filterOptions($cposts, 'post_type', $posttype);
+				$totals[$posttype] = count($pposts);
 			}
 			$year[] = array("name" => $country->name,
 							"slug" => $country->slug,
 							"id" => $country_ids[$country->slug],
-							"positive" => $totals['pos'],
-							"negative" => $totals['neg']);
-			$world['positive'] = $world['positive'] + $totals['pos'];
-			$world['negative'] = $world['negative'] + $totals['neg'];		
+							"positive" => $totals['student_problem'],
+							"negative" => $totals['teaching_activity']);
+			$world['positive'] = $world['positive'] + $totals['student_problem'];
+			$world['negative'] = $world['negative'] + $totals['teaching_activity'];		
 		}
 		$year[] = $world;
 		$data = array("2013" => $year);

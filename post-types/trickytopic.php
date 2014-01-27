@@ -20,8 +20,8 @@ if(!class_exists('TrickyTopic_Template'))
     		// register actions
     		add_action('init', array(&$this, 'init'));
     		add_action('admin_init', array(&$this, 'admin_init'));
-			add_action('manage_edit-'.self::POST_TYPE.'_columns', array(&$this, 'columns'));
-			add_action('manage_'.self::POST_TYPE.'_posts_custom_column', array(&$this, 'column'),10 ,2);
+			//add_action('manage_edit-'.self::POST_TYPE.'_columns', array(&$this, 'columns'));
+			//add_action('manage_'.self::POST_TYPE.'_posts_custom_column', array(&$this, 'column'),10 ,2);
 			add_filter('post_type_link', array(&$this, 'custom_post_type_link'), 1, 3);
 		
 			
@@ -100,7 +100,6 @@ if(!class_exists('TrickyTopic_Template'))
 					),
     				'public' => true,
     				'description' => __("A Tricky Topic"),
-					'taxonomies' => array('post_tag'),
     				'supports' => array(
     					'title', 'excerpt', 'author',
     				),
@@ -116,8 +115,14 @@ if(!class_exists('TrickyTopic_Template'))
 
 			
 			$args = JuxtaLearn_Hub::get_taxonomy_args("Subject","Subjects");
-		
 			register_taxonomy( 'juxtalearn_hub_subject', self::POST_TYPE, $args );
+			$args = JuxtaLearn_Hub::get_taxonomy_args("Stumbling Block","Stumbling Blocks", "block");
+			$args['capabilities'] = array(	'manage_terms' => 'manage_categories',
+											'edit_terms' => 'manage_categories',
+											'delete_terms' => 'manage_categories',
+											'assign_terms' => 'manage_categories'
+										);
+			register_taxonomy( 'juxtalearn_hub_sb', array(self::POST_TYPE, 'student_problem', 'teaching_activity'), $args );
     	}
 	
     	/**
@@ -161,6 +166,31 @@ if(!class_exists('TrickyTopic_Template'))
 					'options' => get_terms('juxtalearn_hub_subject', 'hide_empty=0&orderby=id'),
 					),
 				));
+			$this->options = array_merge($this->options, array(
+				'country' => array(
+					'type' => 'select',
+					'save_as' => 'term',
+					'position' => 'side',
+					'label' => "Country",
+					'options' => get_terms('juxtalearn_hub_country', 'hide_empty=0'),
+					),
+			 ));
+			 $this->options = array_merge($this->options, array(
+				'location_id' => array(
+					'type' => 'location',
+					'save_as' => 'post_meta',
+					'position' => 'side',
+					'label' => 'Location',
+					'descr' => 'Optional field to associate tricky topic to a location',
+					)
+			 ));
+			 $this->options = array_merge($this->options, array(
+				'add_link' => array(
+					'type' => 'add_link',
+					'position' => 'side',
+					'label' => "Action",
+					),
+				));
 			// Add metaboxes
     		add_action('add_meta_boxes', array(&$this, 'add_meta_boxes'));
 			
@@ -179,7 +209,10 @@ if(!class_exists('TrickyTopic_Template'))
     			self::POST_TYPE,
 				'side'
     	    );	
-			remove_meta_box('tagsdiv-juxtalearn_hub_subject',self::POST_TYPE,'side');				
+			remove_meta_box('tagsdiv-juxtalearn_hub_subject',self::POST_TYPE,'side');
+			remove_meta_box('tagsdiv-juxtalearn_hub_sb',self::POST_TYPE,'side');
+			remove_meta_box('tagsdiv-juxtalearn_hub_country',self::POST_TYPE,'side');
+			add_meta_box( 'tagsdiv-juxtalearn_hub_sb', 'Stumbling Blocks', 'post_tags_meta_box', self::POST_TYPE, 'side', 'low', array( 'taxonomy' => 'juxtalearn_hub_sb' ));				
     	} // END public function add_meta_boxes()
 
 		 /**

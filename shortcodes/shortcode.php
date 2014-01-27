@@ -51,7 +51,16 @@ abstract class JuxtaLearn_Hub_Shortcode {
 		foreach (explode(',', $options) as $type) {
 			$type = trim($type);
 			$slug = $type."_slug";
-			if (isset($post[$type]) && isset($post[$slug])){
+			if ($type == 'sb'){
+				$tags =wp_get_post_terms( $post['ID'], 'juxtalearn_hub_'.$type);
+				$ln = '<span class="meta_label">Stumbling Blocks</span>: ';
+				foreach($tags as $tag){
+					$ln .= $sep . '<a href="'.get_term_link($tag).'">'.$tag->name.'</a>';
+					$sep = ' | ';
+				}
+				$out[] = $ln;
+				
+			} elseif (isset($post[$type]) && isset($post[$slug])){
 				if (is_array($post[$slug]) && is_array($post[$type])){
 					foreach ($post[$slug] as $idx => $post_slug){
 						$out[] = $this->get_meta($post, $type, $slug, $idx);
@@ -79,13 +88,14 @@ abstract class JuxtaLearn_Hub_Shortcode {
 		} elseif (isset($post[$type])) {
 			$name = $post[$type];
 		}
+
 		if (isset($slug_url) && !is_wp_error($slug_url)){
 			return __(sprintf('<span class="meta_label">%s</span>: <a href="%s">%s</a>', ucwords(str_replace("_", " ",$type)),$slug_url , ucwords($name)));
 		} elseif ($type == 'trickytopic') {
 			return  __(sprintf('<span class="meta_label">%s</span>: <a href="%s">%s</a>', ucwords($type),get_permalink($post['trickytopic_id']) , get_the_title($post['trickytopic_id'])));
-		} elseif(isset($post[$type]) && ($type=="citation" || $type=="resource_link" || $type == "type")) {
-			if ($type == "type"){
-				return __(sprintf('<span class="meta_label">%s</span>: <a href="%s">%s</a>', ucwords(str_replace("_", " ",$type)), get_post_type_archive_link($type), ucwords($post[$type])));
+		} elseif(isset($post[$type]) && ($type=="citation" || $type=="resource_link" || $type == "post_type")) {
+			if ($type == "post_type"){
+				return __(sprintf('<span class="meta_label">%s</span>: <a href="%s">%s</a>', ucwords(str_replace("_", " ",$type)), get_post_type_archive_link($post[$type]), ucwords($post[$type])));
 			} else {
 				return __(sprintf('<span class="meta_label">%s</span>: <a href="%s">%s</a>', ucwords(str_replace("_", " ",$type)), $post[$type], $post[$type]));
 			}

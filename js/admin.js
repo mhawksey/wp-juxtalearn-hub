@@ -14,11 +14,110 @@ var errorDNA = "The location does not exist. <a href='post-new.php?post_type=loc
 var map = map || "";
 var marker = marker || "";
 
+jQuery('#juxtalearn_hub_trickytopic_id').change(function(){
+ var tt_id = jQuery(this).val();
+ inheritTrickyTopicVals(tt_id);
+});
+
+// http://stackoverflow.com/a/3855394/1027723
+var qs = (function(a) {
+    if (a == "") return {};
+    var b = {};
+    for (var i = 0; i < a.length; ++i)
+    {
+        var p=a[i].split('=');
+        if (p.length != 2) continue;
+        b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+    }
+    return b;
+})(window.location.search.substr(1).split('&'));
+
+jQuery( document ).ready(function($) {
+    if(qs['tt_id']){
+		inheritTrickyTopicVals(qs['tt_id']);
+	}                                                   
+	$('.tax_term').hide();
+	$('div[class$="desc"]').show();
+	$('.tabs-text').show();
+	$( "#juxtalearn_hub_tax_tabs" ).show();
+})
+
+jQuery(function($) {
+	$( "#juxtalearn_hub_tax_tabs" ).tabs({                                                                  
+            activate: function(event,ui){ 
+							$('.tax_term').hide();                                                     
+                            $('.tax_term').hide();
+							$('div[class$="desc"]').show();                                                  
+                    }                                                                          
+         }).css("min-height", "200px");;
+	$('#juxtalearn_hub_tax_tabs').find('label').hover(function(){
+			$('.tax_term').hide();
+			$(this).css('text-decoration', 'underline');
+			var labelName = $(this).attr('for');
+			$('.tax_term.'+labelName).fadeIn(500);
+		}, function(){
+			$('.tax_term').hide();
+			$('div[class$="desc"]').fadeIn(500); 
+			$(this).css('text-decoration','');
+	});
+});
+
+function inheritTrickyTopicVals(tt_id){
+	var $ = jQuery;
+	$.ajax({
+		url: ajaxurl,
+		type: 'POST',
+		async: true,
+		cache: false,
+		dataType: 'json',
+		data: {
+			action: 'juxtalearn_hub_tricky_topic_details',
+			tt_id: tt_id,
+		},
+		success: function( $data ){
+			
+			$('#juxtalearn_hub_country').val($data.juxtalearn_hub_country[0]);
+			$('#juxtalearn_hub_location_id_field').val($data.juxtalearn_hub_location_id_field);
+			$('#juxtalearn_hub_location_id').val($data.juxtalearn_hub_location_id);
+			$('#tax-input-juxtalearn_hub_sb').val('');
+			$('#juxtalearn_hub_sb .tagchecklist').empty();
+			$('#new-tag-juxtalearn_hub_sb').val($data.juxtalearn_hub_sb.join(","));
+			tagBox.flushTags($('#new-tag-juxtalearn_hub_sb').closest('.tagsdiv'));
+			$('#juxtalearn_hub_trickytopic_id').val(tt_id).focus();
+		}
+	});
+}
+function cleanTags(el, a, f) {
+		var $ = jQuery;
+		var tagsval, newtags, text,
+			tags = $('.the-tags', el),
+			newtag = $('input.newtag', el),
+			comma = postL10n.comma;
+		a = a || false;
+
+		text = a ? $(a).text() : newtag.val();
+		tagsval = tags.val();
+		newtags = tagsval ? tagsval + comma + text : text;
+
+		newtags = tagBox.clean( newtags );
+		newtags = array_unique_noempty( newtags.split(comma) ).join(comma);
+		tags.val(newtags);
+		tagBox.quickClicks(el);
+
+		if ( !a )
+			newtag.val('');
+		if ( 'undefined' == typeof(f) )
+			newtag.focus();
+
+		return false;
+	}
+
 jQuery.noConflict()(function(){
 	jQuery.ui.autocomplete.prototype._resizeMenu = function () {
 	  var ul = this.menu.element;
 	  ul.outerWidth(this.element.outerWidth());
 	}
+	
 	jQuery( 'input#juxtalearn_hub_location_id_field' ).each( function() {
 	
 		var $juxtalearn_hub_location_id_field = jQuery( 'input#juxtalearn_hub_location_id_field' );	

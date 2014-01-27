@@ -1,15 +1,15 @@
 <?php
-if(!class_exists('Example_Template'))
+if(!class_exists('Teaching_Activity_Template'))
 {
 	/**
 	 * A PostTypeTemplate class that provides 3 additional meta fields
 	 */
-	class Example_Template
+	class Teaching_Activity_Template
 	{
-		const POST_TYPE	= "example";
-		const ARCHIVE_SLUG = "example"; // use pluralized string if you want an archive page
-		const SINGULAR = "Example";
-		const PLURAL = "Examples";
+		const POST_TYPE	= "teaching_activity";
+		const ARCHIVE_SLUG = "teaching_activity"; // use pluralized string if you want an archive page
+		const SINGULAR = "Teaching Activity";
+		const PLURAL = "Teaching Activities";
 		var $options = array();
 
     	/**
@@ -69,7 +69,7 @@ if(!class_exists('Example_Template'))
 				if ( empty( $trickytopic ) )
 					echo __( 'Empty' );
 				else
-					printf( __( '<a href="?post_type=example&tt_id=%s">%s</a>' ), $trickytopic_id, ucwords($trickytopic) );
+					printf( __( '<a href="?post_type=teaching_activity&tt_id=%s">%s</a>' ), $trickytopic_id, ucwords($trickytopic) );
 				break;
 			default :
 				break;
@@ -101,7 +101,7 @@ if(!class_exists('Example_Template'))
 						'not_found_in_trash' => __(sprintf('No found in Trash%s', self::PLURAL)),
 					),
     				'public' => true,
-    				'description' => __("An example of a Tricky Topic"),
+    				'description' => __("An example of a Student Problem"),
     				'supports' => array(
     					'title', 'editor', 'excerpt', 'author' 
     				),
@@ -115,10 +115,10 @@ if(!class_exists('Example_Template'))
     			)
     		);
 			
-			$args = JuxtaLearn_Hub::get_taxonomy_args("Education Level","Education Levels");
-			register_taxonomy( 'juxtalearn_hub_education_level', self::POST_TYPE, $args );
-			$args = JuxtaLearn_Hub::get_taxonomy_args("Type","Types");
-			register_taxonomy( 'juxtalearn_hub_type', self::POST_TYPE, $args );
+			$args = JuxtaLearn_Hub::get_taxonomy_args("Education Level","Education Levels", 'education_level');
+			register_taxonomy( 'juxtalearn_hub_education_level', array(self::POST_TYPE, 'student_problem'), $args );
+			//$args = JuxtaLearn_Hub::get_taxonomy_args("Type","Types");
+			//register_taxonomy( 'juxtalearn_hub_type', array(self::POST_TYPE, 'student_problem'), $args );
 			
 			
     	}
@@ -178,6 +178,7 @@ if(!class_exists('Example_Template'))
 					'options' => $trickytopic_options,
 					),
 			));
+			/*
 			$this->options = array_merge($this->options, array(
 				'type' => array(
 					'type' => 'select',
@@ -186,7 +187,7 @@ if(!class_exists('Example_Template'))
 					'label' => "Type",
 					'options' => get_terms('juxtalearn_hub_type', 'hide_empty=0&orderby=id'),
 					),
-			));
+			));*/
 			 $this->options = array_merge($this->options, array(
 				'education_level' => array(
 					'type' => 'select',
@@ -215,13 +216,6 @@ if(!class_exists('Example_Template'))
 					'descr' => 'Optional field to associate example to a location',
 					)
 			 ));
-			 $this->options = array_merge($this->options, array(
-				'add_link' => array(
-					'type' => 'add_another_link',
-					'position' => 'side',
-					'label' => "Action"
-					),
-				));
 			 $this->options = array_merge($this->options, array(
 				'link' => array(
 					'type' => 'text',

@@ -1,22 +1,22 @@
 <?php
 
-new JuxtaLearn_Hub_Shortcode_Example_Meta();
+new JuxtaLearn_Hub_Shortcode_Student_Problem_Meta();
 class JuxtaLearn_Hub_Shortcode_Example_Meta extends JuxtaLearn_Hub_Shortcode {
-	var $shortcode = 'example_meta';
+	var $shortcode = 'student_problem_meta';
 	var $defaults = array(
 		'post_id' => false,
 		'post_ids' => false,
 		'title' => false,
 		'location' => 'header',
-		'header_terms' => 'sb',
-		'footer_terms' => 'post_type,type,education_level,country,trickytopic',
+		'header_terms' => 'type,education_level,country,trickytopic',
+		'footer_terms' => 'citation',
 		'no_example_message' => "There is no meta data for this example",
 		'title_tag' => 'h4',
 	);
 
 	
 
-	static $post_types_with_example = array('student_problem', 'teaching_activity');
+	static $post_types_with_example = array('student_problem');
 	
 	function add_to_page($content) {
 		if (in_array(get_post_type(), self::$post_types_with_example)) {
@@ -51,13 +51,12 @@ class JuxtaLearn_Hub_Shortcode_Example_Meta extends JuxtaLearn_Hub_Shortcode {
 		
 		foreach ($post_ids as $post_id) {
 			$post = JuxtaLearn_Hub::add_meta($post_id);
-			
-			$post['post_type'] = get_post_type($post_id);
+			$post['type'] = get_post_type($post_id);
 			if (!$post) {
 				$errors[] = "$post_id is not a valid post ID";
-			} /*else if (!in_array($post['post_type'], self::$post_types_with_example)) {
+			} else if (!in_array($post['type'], self::$post_types_with_example)) {
 				$errors[] = "<a href='".get_permalink($post_id)."'>".get_the_title($post_id)."</a> is not the correct type of post";
-			}*/ else if ($location=="header") { 
+			} else if ($location=="header") { 
 				$this->meta_bar($post, $header_terms);
 			} else if ($location=="footer") { 
 	  			$this->meta_bar($post, $footer_terms);

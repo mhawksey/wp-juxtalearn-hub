@@ -1,15 +1,15 @@
 <?php
-if(!class_exists('Example_Template'))
+if(!class_exists('Student_Problem_Template'))
 {
 	/**
 	 * A PostTypeTemplate class that provides 3 additional meta fields
 	 */
-	class Example_Template
+	class Student_Problem_Template
 	{
-		const POST_TYPE	= "example";
-		const ARCHIVE_SLUG = "example"; // use pluralized string if you want an archive page
-		const SINGULAR = "Example";
-		const PLURAL = "Examples";
+		const POST_TYPE	= "student_problem";
+		const ARCHIVE_SLUG = "student_problem"; // use pluralized string if you want an archive page
+		const SINGULAR = "Student Problem";
+		const PLURAL = "Student Problems";
 		var $options = array();
 
     	/**
@@ -69,7 +69,7 @@ if(!class_exists('Example_Template'))
 				if ( empty( $trickytopic ) )
 					echo __( 'Empty' );
 				else
-					printf( __( '<a href="?post_type=example&tt_id=%s">%s</a>' ), $trickytopic_id, ucwords($trickytopic) );
+					printf( __( '<a href="?post_type=student_problem&tt_id=%s">%s</a>' ), $trickytopic_id, ucwords($trickytopic) );
 				break;
 			default :
 				break;
@@ -101,7 +101,7 @@ if(!class_exists('Example_Template'))
 						'not_found_in_trash' => __(sprintf('No found in Trash%s', self::PLURAL)),
 					),
     				'public' => true,
-    				'description' => __("An example of a Tricky Topic"),
+    				'description' => __("An example of a Student Problem"),
     				'supports' => array(
     					'title', 'editor', 'excerpt', 'author' 
     				),
@@ -115,10 +115,10 @@ if(!class_exists('Example_Template'))
     			)
     		);
 			
-			$args = JuxtaLearn_Hub::get_taxonomy_args("Education Level","Education Levels");
+			$args = JuxtaLearn_Hub::get_taxonomy_args("Education Level","Education Levels" ,"education_level");
 			register_taxonomy( 'juxtalearn_hub_education_level', self::POST_TYPE, $args );
-			$args = JuxtaLearn_Hub::get_taxonomy_args("Type","Types");
-			register_taxonomy( 'juxtalearn_hub_type', self::POST_TYPE, $args );
+			//$args = JuxtaLearn_Hub::get_taxonomy_args("Type","Types");
+			//register_taxonomy( 'juxtalearn_hub_type', self::POST_TYPE, $args );
 			
 			
     	}
@@ -147,6 +147,8 @@ if(!class_exists('Example_Template'))
 					}
 				}
 			}
+			
+			wp_set_post_terms( $_POST['juxtalearn_hub_trickytopic_id'], $_POST['tax_input']['juxtalearn_hub_sb'], 'juxtalearn_hub_sb', true ); 
     	} // END public function save_post($post_id)
 
     	/**
@@ -178,6 +180,7 @@ if(!class_exists('Example_Template'))
 					'options' => $trickytopic_options,
 					),
 			));
+			/*
 			$this->options = array_merge($this->options, array(
 				'type' => array(
 					'type' => 'select',
@@ -187,6 +190,7 @@ if(!class_exists('Example_Template'))
 					'options' => get_terms('juxtalearn_hub_type', 'hide_empty=0&orderby=id'),
 					),
 			));
+			*/
 			 $this->options = array_merge($this->options, array(
 				'education_level' => array(
 					'type' => 'select',
@@ -216,12 +220,14 @@ if(!class_exists('Example_Template'))
 					)
 			 ));
 			 $this->options = array_merge($this->options, array(
-				'add_link' => array(
-					'type' => 'add_another_link',
+				'location_id' => array(
+					'type' => 'location',
+					'save_as' => 'post_meta',
 					'position' => 'side',
-					'label' => "Action"
-					),
-				));
+					'label' => 'Location',
+					'descr' => 'Optional field to associate example to a location',
+					)
+			 ));
 			 $this->options = array_merge($this->options, array(
 				'link' => array(
 					'type' => 'text',
@@ -230,8 +236,87 @@ if(!class_exists('Example_Template'))
 					'label' => 'Link'
 					)
 			 ));
-
-			
+			 $this->options = array_merge($this->options, array(
+				'term01' => array(
+					'type' => 'checkbox',
+					'save_as' => 'post_meta',
+					'position' => 'tax_tool',
+					'label' => 'One term refers to multiple concepts'
+					)
+			 ));
+			 $this->options = array_merge($this->options, array(
+				'term02' => array(
+					'type' => 'checkbox',
+					'save_as' => 'post_meta',
+					'position' => 'tax_tool',
+					'label' => 'One concept has scientific names'
+					)
+			 ));
+			 $this->options = array_merge($this->options, array(
+				'term03' => array(
+					'type' => 'checkbox',
+					'save_as' => 'post_meta',
+					'position' => 'tax_tool',
+					'label' => 'Scientific use of everyday language'
+					)
+			 ));
+			 $this->options = array_merge($this->options, array(
+				'pre01' => array(
+					'type' => 'checkbox',
+					'save_as' => 'post_meta',
+					'position' => 'tax_tool',
+					'label' => 'Understanding of Scientific method, process and practice'
+					)
+			 ));
+			 $this->options = array_merge($this->options, array(
+				'pre02' => array(
+					'type' => 'checkbox',
+					'save_as' => 'post_meta',
+					'position' => 'tax_tool',
+					'label' => 'Underpinning understandings'
+					)
+			 ));
+			 $this->options = array_merge($this->options, array(
+				'esn01' => array(
+					'type' => 'checkbox',
+					'save_as' => 'post_meta',
+					'position' => 'tax_tool',
+					'label' => 'Underpinning concepts'
+					)
+			 ));
+			 $this->options = array_merge($this->options, array(
+				'esn02' => array(
+					'type' => 'checkbox',
+					'save_as' => 'post_meta',
+					'position' => 'tax_tool',
+					'label' => 'Complementary concepts'
+					)
+			 ));
+			 $this->options = array_merge($this->options, array(
+				'bel01' => array(
+					'type' => 'checkbox',
+					'save_as' => 'post_meta',
+					'position' => 'tax_tool',
+					'label' => 'Weak human-like or world-like analogy '
+					)
+			 ));
+			 $this->options = array_merge($this->options, array(
+				'bel02' => array(
+					'type' => 'checkbox',
+					'save_as' => 'post_meta',
+					'position' => 'tax_tool',
+					'label' => 'Key characteristic conveys group membership'
+					)
+			 ));
+			 $this->options = array_merge($this->options, array(
+				'bel03' => array(
+					'type' => 'checkbox',
+					'save_as' => 'post_meta',
+					'position' => 'tax_tool',
+					'label' => 'Flawed causal reasoning'
+					)
+			 ));
+		
 			// Add metaboxes
     		add_action('add_meta_boxes', array(&$this, 'add_meta_boxes'));
 			//add_action( 'bulk_edit_custom_box', array(&$this,'add_to_bulk_quick_edit_custom_box'), 10, 2 );
@@ -266,6 +351,16 @@ if(!class_exists('Example_Template'))
 			remove_meta_box('tagsdiv-juxtalearn_hub_sb',self::POST_TYPE,'side');
 			//remove_meta_box('fzisotope_categoriesdiv', 'fzisotope_post', 'side');
 			add_meta_box( 'tagsdiv-juxtalearn_hub_sb', 'Stumbling Blocks', 'post_tags_meta_box', self::POST_TYPE, 'side', 'low', array( 'taxonomy' => 'juxtalearn_hub_sb' ));
+			
+			add_meta_box( 
+    			sprintf('wp_juxtalearn_hub_%s_tax_tool_section', self::POST_TYPE),
+    			'Why students have problems',
+    			array(&$this, 'add_inner_meta_boxes_tax_tool'),
+    			self::POST_TYPE,
+				'normal',
+				'high'
+    	    );
+			
 			add_meta_box( 
     			sprintf('wp_juxtalearn_hub_%s_section', self::POST_TYPE),
     			sprintf('%s Information', ucwords(str_replace("_", " ", self::POST_TYPE))),
@@ -296,6 +391,16 @@ if(!class_exists('Example_Template'))
 			// Render the job order metabox
 			$sub_options = JuxtaLearn_Hub::filterOptions($this->options, 'position', 'bottom');
 			include(sprintf("%s/custom_post_metaboxes.php", dirname(__FILE__)));			
+		} // END public function add_inner_meta_boxes($post)
+		
+				/**
+		 * called off of the add meta box
+		 */		
+		public function add_inner_meta_boxes_tax_tool($post)
+		{		
+			// Render the job order metabox
+			$sub_options = JuxtaLearn_Hub::filterOptions($this->options, 'position', 'tax_tool');
+			include(sprintf("%s/taxonomy-tool.php", dirname(__FILE__)));			
 		} // END public function add_inner_meta_boxes($post)
 		
 		
