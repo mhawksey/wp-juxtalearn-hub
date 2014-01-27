@@ -69,7 +69,7 @@ if(!class_exists('Teaching_Activity_Template'))
 				if ( empty( $trickytopic ) )
 					echo __( 'Empty' );
 				else
-					printf( __( '<a href="?post_type=teaching_activity&tt_id=%s">%s</a>' ), $trickytopic_id, ucwords($trickytopic) );
+					printf( __( '<a href="?post_type=teaching_activity&trickytopic_id=%s">%s</a>' ), $trickytopic_id, ucwords($trickytopic) );
 				break;
 			default :
 				break;

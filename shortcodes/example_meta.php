@@ -9,7 +9,7 @@ class JuxtaLearn_Hub_Shortcode_Example_Meta extends JuxtaLearn_Hub_Shortcode {
 		'title' => false,
 		'location' => 'header',
 		'header_terms' => 'sb',
-		'footer_terms' => 'post_type,type,education_level,country,trickytopic',
+		'footer_terms' => 'post_type,type,education_level,country,trickytopic,link',
 		'no_example_message' => "There is no meta data for this example",
 		'title_tag' => 'h4',
 	);

@@ -69,7 +69,7 @@ if(!class_exists('Student_Problem_Template'))
 				if ( empty( $trickytopic ) )
 					echo __( 'Empty' );
 				else
-					printf( __( '<a href="?post_type=student_problem&tt_id=%s">%s</a>' ), $trickytopic_id, ucwords($trickytopic) );
+					printf( __( '<a href="?post_type=student_problem&trickytopic_id=%s">%s</a>' ), $trickytopic_id, ucwords($trickytopic) );
 				break;
 			default :
 				break;
@@ -249,7 +249,7 @@ if(!class_exists('Student_Problem_Template'))
 					'type' => 'checkbox',
 					'save_as' => 'post_meta',
 					'position' => 'tax_tool',
-					'label' => 'One concept has scientific names'
+					'label' => 'Once concept has many scientific names'
 					)
 			 ));
 			 $this->options = array_merge($this->options, array(
@@ -354,7 +354,7 @@ if(!class_exists('Student_Problem_Template'))
 			
 			add_meta_box( 
     			sprintf('wp_juxtalearn_hub_%s_tax_tool_section', self::POST_TYPE),
-    			'Why students have problems',
+    			'Taxonomy: Why do students have this problem? Select all that apply.',
     			array(&$this, 'add_inner_meta_boxes_tax_tool'),
     			self::POST_TYPE,
 				'normal',

@@ -88,6 +88,9 @@ abstract class JuxtaLearn_Hub_Shortcode {
 		} elseif (isset($post[$type])) {
 			$name = $post[$type];
 		}
+		if (!isset($post[$type]) || $post[$type] == ""){
+			return;
+		}
 
 		if (isset($slug_url) && !is_wp_error($slug_url)){
 			return __(sprintf('<span class="meta_label">%s</span>: <a href="%s">%s</a>', ucwords(str_replace("_", " ",$type)),$slug_url , ucwords($name)));
@@ -99,10 +102,17 @@ abstract class JuxtaLearn_Hub_Shortcode {
 			} else {
 				return __(sprintf('<span class="meta_label">%s</span>: <a href="%s">%s</a>', ucwords(str_replace("_", " ",$type)), $post[$type], $post[$type]));
 			}
-		} elseif (isset($post[$type])) {
+		} elseif (isset($post[$type]) && $type == "link") {
+			if (filter_var($post[$type], FILTER_VALIDATE_URL) === FALSE) {
+				return __(sprintf('<span class="meta_label">%s</span>:b %s', ucwords(str_replace("_", " ",$type)),$post[$type]));
+			} else {
+				return __(sprintf('<span class="meta_label">%s</span>: <a href="%s">Resource Link</a>', ucwords(str_replace("_", " ",$type)),$post[$type]));
+			}
+		}
+		elseif (isset($post[$type]) ) {
 			return __(sprintf('<span class="meta_label">%s</span>: %s', ucwords(str_replace("_", " ",$type)),$post[$type]));
 		}
-		return NULL;
+		return;
 	}
 	
 	function prep_options() {
