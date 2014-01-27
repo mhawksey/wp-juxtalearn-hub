@@ -54,15 +54,22 @@ display:none;
 	width: 550px !important;
 	height: 300px !important;
 }
-
-.tabs-check{
-	width:40%;
-	float:left;
+.tax-row{
+	display:table-row;	
+}
+.tabs-check, .tabs-text-col{
+	display:table-cell;
+}
+.tabs-check {
+	min-width:300px;	
+}
+.tabs-text-col {
+	width:100%;
+	padding-left:10px;
+	border-left: 1px #ccc solid;
 }
 
 .tabs-text {
-	float:right;
-	width:59%;
 	display:none;
 }
 #juxtalearn_hub_tax_tabs{

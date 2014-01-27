@@ -49,7 +49,7 @@ jQuery(function($) {
                             $('.tax_term').hide();
 							$('div[class$="desc"]').show();                                                  
                     }                                                                          
-         }).css("min-height", "200px");;
+         }).css("min-height", "150px");;
 	$('#juxtalearn_hub_tax_tabs').find('label').hover(function(){
 			$('.tax_term').hide();
 			$(this).css('text-decoration', 'underline');
