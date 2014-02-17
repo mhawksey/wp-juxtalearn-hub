@@ -62,7 +62,7 @@ class JuxtaLearn_Hub_Shortcode_Subject_Summary extends JuxtaLearn_Hub_Shortcode 
 		<?php wp_list_categories( $args ); ?>
 		</ul>
         </div>
-        <?
+        <?php
  		return ob_get_clean();
 	} // end of function content
 
