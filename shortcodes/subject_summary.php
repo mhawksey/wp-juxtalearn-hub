@@ -17,15 +17,25 @@ class JuxtaLearn_Hub_Shortcode_Subject_Summary extends JuxtaLearn_Hub_Shortcode 
 	
 	function prep_options() {
 	   // Turn csv into array
-		if (!is_array($this->options['post_ids'])) $this->options['post_ids'] = array();
-		if (!empty($this->options['post_ids'])) $this->options['post_ids'] = explode(',', $this->options['post_ids']);
+		if (!is_array($this->options['post_ids'])) {
+			$this->options['post_ids'] = array();
+		}
+
+		if (!empty($this->options['post_ids'])) {
+			$this->options['post_ids'] = explode(',', $this->options['post_ids']);
+		}
 
 		// add post_id to post_ids and get rid of it
-		if ($this->options['post_id']) $this->options['post_ids'] = array_merge($this->options['post_ids'], explode(',', $this->options['post_id']));
+		// Note, 'post_id' is not a bug!
+		if ($this->options['post_id']) {
+			$this->options['post_ids'] = array_merge($this->options['post_ids'], explode(',', $this->options['post_id']));
+		}
 		unset($this->options['post_id']);
 		
 		// fallback to current post if nothing specified
-		if (empty($this->options['post_ids']) && $GLOBALS['post']->ID) $this->options['post_ids'] = array($GLOBALS['post']->ID);
+		if (empty($this->options['post_ids']) && $GLOBALS['post']->ID) {
+			$this->options['post_ids'] = array($GLOBALS['post']->ID);
+		}
 		
 		// unique list
 		$this->options['post_ids'] = array_unique($this->options['post_ids']);
