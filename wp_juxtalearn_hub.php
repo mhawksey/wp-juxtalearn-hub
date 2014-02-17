@@ -200,8 +200,6 @@ if(!class_exists('JuxtaLearn_Hub'))
 		public function juxtalearn_hub_queryvars( $qvars )
 		{
 		  $qvars[] = 'trickytopic_id';
-		  $qvars[] = 'polarity';
-		  $qvars[] = 'sector';
 		  return $qvars;
 		}
 		
