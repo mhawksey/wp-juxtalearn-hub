@@ -1,96 +1,83 @@
 <?php
-
+/**
+ * Fancy Evidence Map with Bars and Sankey Shortcode
+ *
+ * Shortcode: [example_map]
+ *
+ * Based on shortcode class construction used in Conferencer http://wordpress.org/plugins/conferencer/.
+ *
+ *
+ * @package JuxtaLearn_Hub
+ * @subpackage JuxtaLearn_Hub_Shortcode
+ */
 new JuxtaLearn_Hub_Shortcode_Example_Map();
 class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
-	var $shortcode = 'example_map';
-	var $defaults = array(
-		'post_id' => false,
-		'post_ids' => false,
-		'title' => false,
-		'no_example_message' => "There is no example map yet to display",
-		'link_post' => true,
-		'link_sessions' => true,
-		'title_tag' => 'h3',
-	);
-
-	
+	public $shortcode = 'example_map';
+	public $defaults = array();
 
 	static $post_types_with_example = array();
 	
-	
-	function prep_options() {
-		// Turn csv into array
-		if (!is_array($this->options['post_ids'])) $this->options['post_ids'] = array();
-		if (!empty($this->options['post_ids'])) $this->options['post_ids'] = explode(',', $this->options['post_ids']);
-
-		// add post_id to post_ids and get rid of it
-		if ($this->options['post_id']) $this->options['post_ids'] = array_merge($this->options['post_ids'], explode(',', $this->options['post_id']));
-		unset($this->options['post_id']);
-		
-		// fallback to current post if nothing specified
-		if (empty($this->options['post_ids']) && $GLOBALS['post']->ID) $this->options['post_ids'] = array($GLOBALS['post']->ID);
-		
-		// unique list
-		$this->options['post_ids'] = array_unique($this->options['post_ids']);
-	}
 
 	function content() {
 		ob_start();
 		extract($this->options);
 		$errors = array();	
-		?>
-        <script type="application/javascript">
-				/* <![CDATA[ */
-		var MyAjax = {
-			pluginurl: getPath('<?php echo JUXTALEARN_HUB_URL; ?>'),
-			ajaxurl: getPath('<?php echo admin_url();?>admin-ajax.php')
-		};
-		function getPath(url) {
-			var a = document.createElement('a');
-			a.href = url;
-			return a.pathname.charAt(0) != '/' ? '/' + a.pathname : a.pathname;
-		}
-		/* ]]> */
-		<?php 
-		$handle = fopen(JUXTALEARN_HUB_PATH.'/lib/map/data/world-country-names.csv', 'r'); 
-		$country_ids = array();
-		if ($handle) 
-		{ 
-			set_time_limit(0); 		
-			//loop through one row at a time 
-			while (($rows = fgetcsv($handle, 256, ';')) !== FALSE) 
-			{ 
-				$country_ids[$rows[2]] = $rows[0];
-			} 
-			fclose($handle); 
-		} 
+		
+		/**
+		* A lot of this is a fudge to get the data in the right shape for Timo Grossenbacher/Global Oil Presentation.
+		* The overall aim is to get a year bin (the actual year is currently ignored) with an array containing: country name,
+		* slug, id (country id used in world-110m.json TOPOJson), and evidence counts for +ve/-ve extract shown below. Once we 
+		* have this Timo's script (with some modification) does the rest.   
+		* var data = {
+		* 		  "2013": [
+		* 			{
+		* 			  "name": "Australia",
+		* 			  "slug": "au",
+		* 			  "id": "36",
+		* 			  "positive": 0,
+		* 			  "negative": 1
+		* 			},
+		* 			{
+		* 			  "name": "Belgium",
+		* 			  "slug": "be",
+		* 			  "id": "56",
+		* 			  "positive": 0,
+		* 			  "negative": 0
+		* 			},
+		*			...
+		* 		  ]
+		* 		} 
+		*
+		*/
+		
+		$year = array();
+		$graph = array();
+		$nodes = array();
+		$links = array();
+		$totals = array();
+		
+		// Build a country slug => id lookup by reading csv used in visualisation
+		$country_ids = $this->get_country_ids();
+		
+		$world = array("name"=>"World",
+			   "id" => 900,
+			   "positive" => 0,
+			   "negative" => 0);  
+		 
 		$posttypes = array('student_problem','teaching_activity');
 		$args = array('post_type' => $posttypes, // my custom post type
     				   'posts_per_page' => -1,
 					   'post_status' => 'publish',
 					   'fields' => 'ids'); // show all posts);
 		
-		$year = array();
 		
 		$posts = JuxtaLearn_Hub::add_terms(get_posts($args));
 		
 		$countries = get_terms('juxtalearn_hub_country', array('post_types' => $posttypes ));
-		//$polarities = get_terms('juxtalearn_hub_polarity');
+		
 		$args['post_type'] = 'tricky_topic';
 		$trickytopic = get_posts($args);
 
-		
-		$graph = array();
-		$nodes = array();
-		$links = array();
-		$totals = array();
-		
-
-
-		$world = array("name"=>"World",
-					   "id" => 900,
-					   "positive" => 0,
-					   "negative" => 0);
 		foreach ($countries as $country){
 			$cposts = JuxtaLearn_Hub::filterOptions($posts, 'country_slug' , $country->slug);
 			$totals = array();
@@ -108,9 +95,22 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
 		}
 		$year[] = $world;
 		$data = array("2013" => $year);
-		print_r("var data = ".json_encode($data).";")
 		
+		// finally echo all the HTML/JS required
 		?>
+        <script type="application/javascript">
+				/* <![CDATA[ */
+		var MyAjax = {
+			pluginurl: getPath('<?php echo JUXTALEARN_HUB_URL; ?>'),
+			ajaxurl: getPath('<?php echo admin_url();?>admin-ajax.php')
+		};
+		function getPath(url) {
+			var a = document.createElement('a');
+			a.href = url;
+			return a.pathname.charAt(0) != '/' ? '/' + a.pathname : a.pathname;
+		}
+		var data = <?php echo json_encode($data);?>;
+		/* ]]> */
 		</script>
         <script src="<?php echo plugins_url( 'lib/map/lib/queue.v1.min.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" type="text/javascript" charset="utf-8"></script>
         <script src="<?php echo plugins_url( 'lib/map/lib/topojson.v1.min.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" type="text/javascript" charset="utf-8"></script>
@@ -206,8 +206,28 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
 			jQuery('#juxtalearn-map').css('height','');
 			jQuery('#ui').hide();
 		}
-</script>
+		</script>
 		<?php
 		return ob_get_clean();
+	}
+	/**
+	* Build a country slug => id lookup.
+	*
+	* @since 0.1.1
+	* @return array 
+	*/
+	private function get_country_ids(){
+		$country_ids = array();
+		$handle = fopen(JUXTALEARN_HUB_PATH.'/lib/map/data/world-country-names.csv', 'r'); 
+		if ($handle) { 
+			set_time_limit(0); 		
+			//loop through one row at a time 
+			while (($rows = fgetcsv($handle, 256, ';')) !== FALSE) 
+			{ 
+				$country_ids[$rows[2]] = $rows[0];
+			} 
+			fclose($handle); 
+		}
+		return $country_ids; 	
 	}
 }

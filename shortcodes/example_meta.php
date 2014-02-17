@@ -1,17 +1,30 @@
 <?php
-
+/**
+ * Meta Bars Shortcode class used to construct shortcodes
+ *
+ * Generates metadata bars for policy
+ * Shortcode: [example_meta]
+ * Options: title - boolean|string
+ *			location - header|footer|false
+ *			header_terms - comma seperated list of fields to display
+ *			footer_terms -  comma seperated list of fields to display
+ *			no_example_message - message used on error
+ *
+ * Based on shortcode class construction used in Conferencer http://wordpress.org/plugins/conferencer/.
+ *
+ *
+ * @package JuxtaLearn_Hub
+ * @subpackage JuxtaLearn_Hub_Shortcode
+ */
 new JuxtaLearn_Hub_Shortcode_Example_Meta();
 class JuxtaLearn_Hub_Shortcode_Example_Meta extends JuxtaLearn_Hub_Shortcode {
-	var $shortcode = 'example_meta';
-	var $defaults = array(
-		'post_id' => false,
-		'post_ids' => false,
+	public $shortcode = 'example_meta';
+	public $defaults = array(
 		'title' => false,
 		'location' => 'header',
 		'header_terms' => 'sb',
 		'footer_terms' => 'post_type,type,education_level,country,trickytopic,link',
 		'no_example_message' => "There is no meta data for this example",
-		'title_tag' => 'h4',
 	);
 
 	
@@ -24,44 +37,26 @@ class JuxtaLearn_Hub_Shortcode_Example_Meta extends JuxtaLearn_Hub_Shortcode {
 		}
 		return $content;
 	}
-	
-	function prep_options() {
-		// Turn csv into array
-		if (!is_array($this->options['post_ids'])) $this->options['post_ids'] = array();
-		if (!empty($this->options['post_ids'])) $this->options['post_ids'] = explode(',', $this->options['post_ids']);
-
-		// add post_id to post_ids and get rid of it
-		if ($this->options['post_id']) $this->options['post_ids'] = array_merge($this->options['post_ids'], explode(',', $this->options['post_id']));
-		unset($this->options['post_id']);
-		
-		// fallback to current post if nothing specified
-		if (empty($this->options['post_ids']) && $GLOBALS['post']->ID) $this->options['post_ids'] = array($GLOBALS['post']->ID);
-		
-		// unique list
-		$this->options['post_ids'] = array_unique($this->options['post_ids']);
-	}
 
 	function content() {
 		ob_start();
 		extract($this->options);
-		
+		$post_id = get_the_ID();
 		$errors = array();
 
-		if (empty($post_ids)) $errors[] = "No posts ID provided";
+		if (!$post_id) $errors[] = "No posts ID provided";
 		
-		foreach ($post_ids as $post_id) {
-			$post = JuxtaLearn_Hub::add_meta($post_id);
-			
-			$post['post_type'] = get_post_type($post_id);
-			if (!$post) {
-				$errors[] = "$post_id is not a valid post ID";
-			} /*else if (!in_array($post['post_type'], self::$post_types_with_example)) {
-				$errors[] = "<a href='".get_permalink($post_id)."'>".get_the_title($post_id)."</a> is not the correct type of post";
-			}*/ else if ($location=="header") { 
-				$this->meta_bar($post, $header_terms);
-			} else if ($location=="footer") { 
-	  			$this->meta_bar($post, $footer_terms);
-			}
+		$post = JuxtaLearn_Hub::add_meta($post_id);
+		
+		$post['post_type'] = get_post_type($post_id);
+		if (!$post) {
+			$errors[] = "$post_id is not a valid post ID";
+		} /*else if (!in_array($post['post_type'], self::$post_types_with_example)) {
+			$errors[] = "<a href='".get_permalink($post_id)."'>".get_the_title($post_id)."</a> is not the correct type of post";
+		}*/ else if ($location=="header") { 
+			$this->meta_bar($post, $header_terms);
+		} else if ($location=="footer") { 
+			$this->meta_bar($post, $footer_terms);
 		}
 		
 		if (count($errors)) return "[Shortcode errors (".$this->shortcode."): ".implode(', ', $errors)."]";

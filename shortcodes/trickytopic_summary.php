@@ -1,20 +1,27 @@
 <?php
 /**
+ * Trickytopic scorecard 
  *
+ * Generates metadata bars for policy
+ * Shortcode: [tricky_topic_summary]
+ *
+ * Based on shortcode class construction used in Conferencer http://wordpress.org/plugins/conferencer/.
+ *
+ *
+ * @package JuxtaLearn_Hub
+ * @subpackage JuxtaLearn_Hub_Shortcode
  */
 
 new JuxtaLearn_Hub_Shortcode_Tricky_Topic_Summary();
 // Base class 'JuxtaLearn_Hub_Shortcode' defined in 'shortcodes/shortcode.php'.
 class JuxtaLearn_Hub_Shortcode_Tricky_Topic_Summary extends JuxtaLearn_Hub_Shortcode {
-	var $shortcode = 'tricky_topic_summary';
-	var $defaults = array(
+	public $shortcode = 'tricky_topic_summary';
+	public $defaults = array(
 		'post_id' => false,
 		'post_ids' => false,
 		'title' => false,
 		'sankey' => true,
 		'no_example_message' => "There is no example yet for this trickytopic",
-		'link_post' => true,
-		'link_sessions' => true,
 		'title_tag' => 'h3',
 	);
 
@@ -32,23 +39,6 @@ class JuxtaLearn_Hub_Shortcode_Tricky_Topic_Summary extends JuxtaLearn_Hub_Short
 		}
 		return $content;
 	}
-	
-	function prep_options() {
-	   // Turn csv into array
-		if (!is_array($this->options['post_ids'])) $this->options['post_ids'] = array();
-		if (!empty($this->options['post_ids'])) $this->options['post_ids'] = explode(',', $this->options['post_ids']);
-
-		// add post_id to post_ids and get rid of it
-		if ($this->options['post_id']) $this->options['post_ids'] = array_merge($this->options['post_ids'], explode(',', $this->options['post_id']));
-		unset($this->options['post_id']);
-		
-		// fallback to current post if nothing specified
-		if (empty($this->options['post_ids']) && $GLOBALS['post']->ID) $this->options['post_ids'] = array($GLOBALS['post']->ID);
-		
-		// unique list
-		$this->options['post_ids'] = array_unique($this->options['post_ids']);
-	}
-
 
     /**
      * @return string
@@ -56,8 +46,9 @@ class JuxtaLearn_Hub_Shortcode_Tricky_Topic_Summary extends JuxtaLearn_Hub_Short
 	function content() {
 		ob_start();
 		extract($this->options);
-		$post_id = implode(",", $this->options['post_ids']);
+		$post_id = $post_id = get_the_ID();
 		$errors = array();
+		if (!$post_id) $errors[] = "No posts ID provided";
 		?>
         <div class="juxtalearn-list">
         	<?php echo do_shortcode('[example_meta location="header"]'); ?>

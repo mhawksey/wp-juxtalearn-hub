@@ -1,14 +1,18 @@
 <?php
-
-// TODO: Maybe use get_transient for caching?
+/**
+ * Abstract class used to construct shortcodes
+ *
+ * Based on shortcode class construction used in Conferencer http://wordpress.org/plugins/conferencer/.
+ *
+ *
+ * @package JuxtaLearn_Hub
+ * @subpackage JuxtaLearn_Hub_Shortcode
+ */
 
 abstract class JuxtaLearn_Hub_Shortcode {
-	var $shortcode = 'juxtalearn_hub_shortcode';
-	var $defaults = array();
-	var $options = array();
-	var $buttons = array();
-	
-	static $first_button = true;
+	public $shortcode = 'juxtalearn_hub_shortcode';
+	public $defaults = array();
+	public $options = array();
 	
 	function __construct() {
 		add_shortcode($this->shortcode, array(&$this, 'shortcode'));

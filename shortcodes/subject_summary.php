@@ -1,46 +1,24 @@
 <?php
 /**
+ * Subject summary counts and links 
  *
+ * Generates metadata bars for policy
+ * Shortcode: [subject_summary]
+ *
+ * Based on shortcode class construction used in Conferencer http://wordpress.org/plugins/conferencer/.
+ *
+ *
+ * @package JuxtaLearn_Hub
+ * @subpackage JuxtaLearn_Hub_Shortcode
  */
 
 new JuxtaLearn_Hub_Shortcode_Subject_Summary();
 // Base class 'JuxtaLearn_Hub_Shortcode' defined in 'shortcodes/shortcode.php'.
 class JuxtaLearn_Hub_Shortcode_Subject_Summary extends JuxtaLearn_Hub_Shortcode {
 	public $shortcode = 'subject_summary';
-	public $defaults = array(
-
-	);
-
-	
+	public $defaults = array(	);
 
 	public static $post_types_with_example = NULL;
-	
-	public function prep_options() {
-	   // Turn csv into array
-		if (isset($this->options['post_ids']) && !is_array($this->options['post_ids'])) {
-			$this->options['post_ids'] = array();
-		}
-
-		if (!empty($this->options['post_ids'])) {
-			$this->options['post_ids'] = explode(',', $this->options['post_ids']);
-		}
-
-		// add post_id to post_ids and get rid of it
-		// Note, 'post_id' is not a bug!
-		if (isset($this->options['post_id']) && $this->options['post_id']) {
-			$this->options['post_ids'] = array_merge($this->options['post_ids'], explode(',', $this->options['post_id']));
-		}
-		unset($this->options['post_id']);
-		
-		// fallback to current post if nothing specified
-		if (empty($this->options['post_ids']) && $GLOBALS['post']->ID) {
-			$this->options['post_ids'] = array($GLOBALS['post']->ID);
-		}
-		
-		// unique list
-		$this->options['post_ids'] = array_unique($this->options['post_ids']);
-	}
-
 
     /**
      * @return string

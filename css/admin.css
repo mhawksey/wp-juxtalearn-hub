@@ -39,10 +39,15 @@ width: 100px;
  padding:10px 0;	
 }
 .eh_input span { 
-	width: 100%; display: table-cell; 
+	width: 100%; 
+	display: table-cell; 
+
 }
-.eh_input input { 
+.eh_input input, .eh_input select { 
 	width: 100%; display: block; 
+			-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 .eh_pol{
 	font-weight:bold;

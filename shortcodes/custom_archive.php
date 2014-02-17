@@ -1,15 +1,28 @@
 <?php
-
+/**
+ * Creates shortcode to list custom post type archive
+ *
+ * Generates metadata bars for policy
+ * Shortcode: [custom_archive]
+ * Options: posttype - string custom post_type you want to show
+ *
+ * Based on shortcode class construction used in Conferencer http://wordpress.org/plugins/conferencer/.
+ *
+ *
+ * @package JuxtaLearn_Hub
+ * @subpackage JuxtaLearn_Hub_Shortcode
+ */
 new JuxtaLearn_Hub_Shortcode_Custom_Archive();
 class JuxtaLearn_Hub_Shortcode_Custom_Archive extends JuxtaLearn_Hub_Shortcode {
-	var $shortcode = 'custom_archive';
-	var $defaults = array('posttype' => false);
+	public $shortcode = 'custom_archive';
+	public $defaults = array('posttype' => false);
 
 	static $post_types_with_sessions = NULL;
 
 	function content() {
 		ob_start();
 		extract($this->options);
+		global $wp_query;
 		
 		// http://wordpress.stackexchange.com/a/120408/45617
 		// Define custom query parameters
