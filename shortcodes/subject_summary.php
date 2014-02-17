@@ -6,26 +6,36 @@
 new JuxtaLearn_Hub_Shortcode_Subject_Summary();
 // Base class 'JuxtaLearn_Hub_Shortcode' defined in 'shortcodes/shortcode.php'.
 class JuxtaLearn_Hub_Shortcode_Subject_Summary extends JuxtaLearn_Hub_Shortcode {
-	var $shortcode = 'subject_summary';
-	var $defaults = array(
+	public $shortcode = 'subject_summary';
+	public $defaults = array(
 
 	);
 
 	
 
-	static $post_types_with_example = NULL;
+	public static $post_types_with_example = NULL;
 	
-	function prep_options() {
+	public function prep_options() {
 	   // Turn csv into array
-		if (!is_array($this->options['post_ids'])) $this->options['post_ids'] = array();
-		if (!empty($this->options['post_ids'])) $this->options['post_ids'] = explode(',', $this->options['post_ids']);
+		if (isset($this->options['post_ids']) && !is_array($this->options['post_ids'])) {
+			$this->options['post_ids'] = array();
+		}
+
+		if (!empty($this->options['post_ids'])) {
+			$this->options['post_ids'] = explode(',', $this->options['post_ids']);
+		}
 
 		// add post_id to post_ids and get rid of it
-		if ($this->options['post_id']) $this->options['post_ids'] = array_merge($this->options['post_ids'], explode(',', $this->options['post_id']));
+		// Note, 'post_id' is not a bug!
+		if (isset($this->options['post_id']) && $this->options['post_id']) {
+			$this->options['post_ids'] = array_merge($this->options['post_ids'], explode(',', $this->options['post_id']));
+		}
 		unset($this->options['post_id']);
 		
 		// fallback to current post if nothing specified
-		if (empty($this->options['post_ids']) && $GLOBALS['post']->ID) $this->options['post_ids'] = array($GLOBALS['post']->ID);
+		if (empty($this->options['post_ids']) && $GLOBALS['post']->ID) {
+			$this->options['post_ids'] = array($GLOBALS['post']->ID);
+		}
 		
 		// unique list
 		$this->options['post_ids'] = array_unique($this->options['post_ids']);
@@ -35,7 +45,7 @@ class JuxtaLearn_Hub_Shortcode_Subject_Summary extends JuxtaLearn_Hub_Shortcode 
     /**
      * @return string
      */
-	function content() {
+	public function content() {
 		ob_start();
 		extract($this->options);
 		$subject = wp_get_post_terms($trickytopic, 'juxtalearn_hub_subject');
@@ -62,7 +72,7 @@ class JuxtaLearn_Hub_Shortcode_Subject_Summary extends JuxtaLearn_Hub_Shortcode 
 		<?php wp_list_categories( $args ); ?>
 		</ul>
         </div>
-        <?
+        <?php
  		return ob_get_clean();
 	} // end of function content
 
