@@ -17,7 +17,7 @@ class JuxtaLearn_Hub_Shortcode_Subject_Summary extends JuxtaLearn_Hub_Shortcode 
 	
 	public function prep_options() {
 	   // Turn csv into array
-		if (!is_array($this->options['post_ids'])) {
+		if (isset($this->options['post_ids']) && !is_array($this->options['post_ids'])) {
 			$this->options['post_ids'] = array();
 		}
 
@@ -27,7 +27,7 @@ class JuxtaLearn_Hub_Shortcode_Subject_Summary extends JuxtaLearn_Hub_Shortcode 
 
 		// add post_id to post_ids and get rid of it
 		// Note, 'post_id' is not a bug!
-		if ($this->options['post_id']) {
+		if (isset($this->options['post_id']) && $this->options['post_id']) {
 			$this->options['post_ids'] = array_merge($this->options['post_ids'], explode(',', $this->options['post_id']));
 		}
 		unset($this->options['post_id']);
