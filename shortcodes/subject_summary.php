@@ -6,16 +6,16 @@
 new JuxtaLearn_Hub_Shortcode_Subject_Summary();
 // Base class 'JuxtaLearn_Hub_Shortcode' defined in 'shortcodes/shortcode.php'.
 class JuxtaLearn_Hub_Shortcode_Subject_Summary extends JuxtaLearn_Hub_Shortcode {
-	var $shortcode = 'subject_summary';
-	var $defaults = array(
+	public $shortcode = 'subject_summary';
+	public $defaults = array(
 
 	);
 
 	
 
-	static $post_types_with_example = NULL;
+	public static $post_types_with_example = NULL;
 	
-	function prep_options() {
+	public function prep_options() {
 	   // Turn csv into array
 		if (!is_array($this->options['post_ids'])) {
 			$this->options['post_ids'] = array();
@@ -45,7 +45,7 @@ class JuxtaLearn_Hub_Shortcode_Subject_Summary extends JuxtaLearn_Hub_Shortcode 
     /**
      * @return string
      */
-	function content() {
+	public function content() {
 		ob_start();
 		extract($this->options);
 		$subject = wp_get_post_terms($trickytopic, 'juxtalearn_hub_subject');
