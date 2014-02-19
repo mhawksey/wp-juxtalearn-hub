@@ -24,6 +24,8 @@ class JuxtaLearn_Hub_Shortcode_Subject_Summary extends JuxtaLearn_Hub_Shortcode 
      * @return string
      */
 	public function content() {
+		$trickytopic = NULL;
+
 		ob_start();
 		extract($this->options);
 		$subject = wp_get_post_terms($trickytopic, 'juxtalearn_hub_subject');
