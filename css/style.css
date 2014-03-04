@@ -181,3 +181,18 @@ blockquote {
 	display: inline;
 }
 /*THEME-specific ends. */
+
+
+/* Internet Explorer <= 8 message.
+*/
+.map-no-js {
+  text-align: center;
+  font-size: 1.2em;
+  border: 1px solid #bbb;
+  background: #f6f6f6;
+  padding: 5px;
+}
+.ie8 #juxtalearn-map #loading {
+  display: none;
+}
+
