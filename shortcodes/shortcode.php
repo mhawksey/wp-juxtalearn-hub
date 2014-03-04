@@ -51,6 +51,8 @@ abstract class JuxtaLearn_Hub_Shortcode {
 	}
 	
 	function meta_bar($post, $options){
+		$MY_SEP = ' | ';
+
 		$out = array();
 		foreach (explode(',', $options) as $type) {
 			$type = trim($type);
@@ -58,9 +60,9 @@ abstract class JuxtaLearn_Hub_Shortcode {
 			if ($type == 'sb'){
 				$tags =wp_get_post_terms( $post['ID'], 'juxtalearn_hub_'.$type);
 				$ln = '<span class="meta_label">Stumbling Blocks</span>: ';
-				foreach($tags as $tag){
+				foreach($tags as $idx => $tag){
+					$sep = $idx > 0 ? $MY_SEP : '';
 					$ln .= $sep . '<a href="'.get_term_link($tag).'">'.$tag->name.'</a>';
-					$sep = ' | ';
 				}
 				$out[] = $ln;
 				
@@ -78,7 +80,7 @@ abstract class JuxtaLearn_Hub_Shortcode {
 		}
 		$out = array_filter($out);
 		if(!empty($out)){ 
-			echo '<div id="juxtalearn-meta">'.implode(" | ", $out).'</div>';
+			echo '<div id="juxtalearn-meta">'.implode($MY_SEP, $out).'</div>';
        }	
 	}
 	

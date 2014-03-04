@@ -167,6 +167,13 @@ text-align:left;
 blockquote {
   color: #8B4513 !important;
 }
+
+.entry-content .subject-wrap h3 {
+  font-size: 1em;
+  line-height: 1.1em;
+  margin: .9em 0;
+}
+
 .subjectlist {
 	text-align:center;
 }

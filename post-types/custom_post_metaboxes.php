@@ -16,7 +16,7 @@
 				$style = "eh_$name";
 				$value = "";
 				$post_id = isset($post->ID) ? $post->ID : NULL;
-				if (isset($post) && $option['save_as']){
+				if (isset($post) && isset($option['save_as']) && $option['save_as']){
 					if ($option['save_as'] == 'term'){
 						$value = wp_get_object_terms($post->ID, $name); 
 					} else {

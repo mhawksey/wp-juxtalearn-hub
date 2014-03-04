@@ -26,7 +26,7 @@ class JuxtaLearn_Hub_Shortcode_Subject_Summary extends JuxtaLearn_Hub_Shortcode 
 	public function content() {
 		ob_start();
 		extract($this->options);
-		$subject = wp_get_post_terms($trickytopic, 'juxtalearn_hub_subject');
+		//Not used :: $subject = wp_get_post_terms($trickytopic, 'juxtalearn_hub_subject');
 		//list terms in a given taxonomy using wp_list_categories (also useful as a widget if using a PHP Code plugin)
 		
 		$taxonomy     = 'juxtalearn_hub_subject';
@@ -45,7 +45,7 @@ class JuxtaLearn_Hub_Shortcode_Subject_Summary extends JuxtaLearn_Hub_Shortcode 
 		  'title_li'     => $title
 		);
 		?>
-		<div><strong>Subjects</strong>
+		<div class="subject-wrap"><h3>Subjects</h3>
 		<ul class="subjectlist">
 		<?php wp_list_categories( $args ); ?>
 		</ul>
