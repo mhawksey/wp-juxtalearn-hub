@@ -12,7 +12,6 @@
  * @package JuxtaLearn_Hub
  * @subpackage JuxtaLearn_Hub_Shortcode
  */
-new JuxtaLearn_Hub_Shortcode_Custom_Archive();
 class JuxtaLearn_Hub_Shortcode_Custom_Archive extends JuxtaLearn_Hub_Shortcode {
 	public $shortcode = 'custom_archive';
 	public $defaults = array('posttype' => false);

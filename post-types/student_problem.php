@@ -6,7 +6,6 @@
  * @package Juxtalearn_Hub
  * @subpackage Juxtalearn_Hub_CustomPostType
  */
-new Student_Problem_Template();
 class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 {
 	public $post_type	= "student_problem";

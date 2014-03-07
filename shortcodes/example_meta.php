@@ -16,7 +16,6 @@
  * @package JuxtaLearn_Hub
  * @subpackage JuxtaLearn_Hub_Shortcode
  */
-new JuxtaLearn_Hub_Shortcode_Example_Meta();
 class JuxtaLearn_Hub_Shortcode_Example_Meta extends JuxtaLearn_Hub_Shortcode {
 	public $shortcode = 'example_meta';
 	public $defaults = array(

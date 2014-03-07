@@ -6,7 +6,6 @@
  * @package Juxtalearn_Hub
  * @subpackage Juxtalearn_Hub_CustomPostType
  */
-new Teaching_Activity_Template();
 class Teaching_Activity_Template extends Juxtalearn_Hub_CustomPostType
 {
 	public $post_type = "teaching_activity";

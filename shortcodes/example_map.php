@@ -10,7 +10,6 @@
  * @package JuxtaLearn_Hub
  * @subpackage JuxtaLearn_Hub_Shortcode
  */
-new JuxtaLearn_Hub_Shortcode_Example_Map();
 class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
 	public $shortcode = 'example_map';
 	public $defaults = array();

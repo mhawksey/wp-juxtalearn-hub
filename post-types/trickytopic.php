@@ -6,7 +6,6 @@
  * @package Juxtalearn_Hub
  * @subpackage Juxtalearn_Hub_CustomPostType
  */
-new TrickyTopic_Template();
 class TrickyTopic_Template extends Juxtalearn_Hub_CustomPostType
 {
 	public $post_type = "tricky_topic";
