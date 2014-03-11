@@ -283,7 +283,11 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 	 * Save the metaboxes for this custom post type
 	 */
 	public function save_post($post_id)
-	{	
+	{
+		$b_continue = parent::save_post($post_id);
+
+		if (!$b_continue) return;
+
 		if (isset($_POST['tax_input'])){
 			wp_set_post_terms( $_POST['juxtalearn_hub_trickytopic_id'], $_POST['tax_input']['juxtalearn_hub_sb'], 'juxtalearn_hub_sb', true ); 
 		}
