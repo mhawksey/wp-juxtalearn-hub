@@ -80,7 +80,7 @@ abstract class JuxtaLearn_Hub_Shortcode {
 		}
 		$out = array_filter($out);
 		if(!empty($out)){ 
-			echo '<div id="juxtalearn-meta">'.implode($MY_SEP, $out).'</div>';
+			echo '<div class="juxtalearn-meta">'.implode($MY_SEP, $out).'</div>';
        }	
 	}
 	

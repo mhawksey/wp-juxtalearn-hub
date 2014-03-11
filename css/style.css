@@ -1,6 +1,6 @@
 /* CSS Document */
-#juxtalearn-balance, #juxtalearn-meta {
-background-color: #F8F8F8;
+#juxtalearn-balance, .juxtalearn-meta {
+background-color: #f0f0f0; /*#F8F8F8*/
 padding: 10px;
 -moz-border-radius: 5px;
 -webkit-border-radius: 5px;
@@ -8,7 +8,7 @@ border-radius: 5px;
 overflow: hidden;
 font-face: "PT Sans", sans-serif;
 }
-#juxtalearn-balance h4, #juxtalearn-meta h4 {
+#juxtalearn-balance h4, .juxtalearn-meta h4 {
 margin:0;
 font-weight:bold;
 text-align:center;	
@@ -52,11 +52,11 @@ font-weight:normal
 .juxtalearn-box ul li ul {
 margin-top:0px;	
 }
-#juxtalearn-meta {
+.juxtalearn-meta {
 font-size:90%;	
 text-align:left;
 }
-#juxtalearn-meta a {
+.juxtalearn-meta a {
 	-ms-word-break: break-all;
      word-break: break-all;
 
