@@ -34,12 +34,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 define('JUXTALEARN_HUB_VERSION', '0.3');
 define('JUXTALEARN_HUB_PATH', dirname(__FILE__));
 // Handle symbolic links - code portability.
-define('JUXTALEARN_HUB_URL', plugin_dir_url(
-  preg_replace('@/Users/[^\/]+/[^\/]+@', '',           # Mac OS X
+define('JUXTALEARN_HUB_REGISTER_FILE',
+  preg_replace('@/Users/[^\/]+/[^\/]+/[^\/]+@', '',    # Mac OS X
     preg_replace('@\/var\/www\/[^\/]+@', '', __FILE__) # Linux
-  )
 ));
-define('JUXTALEARN_HUB_REGISTER_FILE', JUXTALEARN_HUB_URL);
+define('JUXTALEARN_HUB_URL', plugin_dir_url(JUXTALEARN_HUB_REGISTER_FILE));
 
 
 if(!class_exists('JuxtaLearn_Hub'))
