@@ -6,7 +6,6 @@
  * @package Juxtalearn_Hub
  * @subpackage Juxtalearn_Hub_CustomPostType
  */
-new Location_Template();
 class Location_Template extends Juxtalearn_Hub_CustomPostType
 {
 	public $post_type = "location";

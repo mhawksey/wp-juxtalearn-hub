@@ -68,15 +68,20 @@ class Juxtalearn_Hub_CustomPostType {
 	*
 	*/
 	public function save_post($post_id)	{
+		$b_continue = TRUE;
+
 		// verify if this is an auto save routine. 
 		// If it is our form has not been submitted, so we dont want to do anything
-		if (get_post_type($post_id) != $this->post_type) return;
+		if (get_post_type($post_id) != $this->post_type) return !$b_continue;
 		
-		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return !$b_continue;
 		
-		if (isset($_POST['juxtalearn_hub_nonce']) && !wp_verify_nonce($_POST['juxtalearn_hub_nonce'], plugin_basename(__FILE__))) return;
+		if (isset($_POST['juxtalearn_hub_nonce']) &&
+			!wp_verify_nonce($_POST['juxtalearn_hub_nonce'], plugin_basename(__FILE__))) {
+			return !$b_continue;
+		}
 		
-		if (!current_user_can('edit_post', $post_id)) return;
+		if (!current_user_can('edit_post', $post_id)) return !$b_continue;
 
 		foreach($this->options as $name => $option)	{
 			// Update the post's meta field
@@ -92,6 +97,7 @@ class Juxtalearn_Hub_CustomPostType {
 				}
 			}
 		}
+		return $b_continue;
 	} // END public function save_post($post_id)
 	
 	/**

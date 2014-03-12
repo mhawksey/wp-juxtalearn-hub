@@ -10,7 +10,6 @@
  * @package JuxtaLearn_Hub
  * @subpackage JuxtaLearn_Hub_Shortcode
  */
-new JuxtaLearn_Hub_Shortcode_Example_Map();
 class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
 	public $shortcode = 'example_map';
 	public $defaults = array();
@@ -145,8 +144,16 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
         <!--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">-->
 		
           <div id="juxtalearn-map">
+
+<!--[if lte IE 8]>
+            <div class=map-no-js >
+              <p>Unfortunately, the map doesn't work in older browsers. Please <a
+                href="http://whatbrowser.org/">try a different browser</a>.</p>
+            </div>
+<![endif]-->
+
                 <div id="loading">
-                    Loading...
+                    Loading map...
                 </div>
 
             <header>

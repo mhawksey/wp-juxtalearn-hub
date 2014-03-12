@@ -12,7 +12,6 @@
  * @subpackage JuxtaLearn_Hub_Shortcode
  */
 
-new JuxtaLearn_Hub_Shortcode_Subject_Summary();
 // Base class 'JuxtaLearn_Hub_Shortcode' defined in 'shortcodes/shortcode.php'.
 class JuxtaLearn_Hub_Shortcode_Subject_Summary extends JuxtaLearn_Hub_Shortcode {
 	public $shortcode = 'subject_summary';
