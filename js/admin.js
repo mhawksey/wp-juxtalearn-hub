@@ -60,6 +60,57 @@ jQuery(function($) {
 			$('div[class$="desc"]').fadeIn(500); 
 			$(this).css('text-decoration','');
 	});
+
+	//NDF: Stumbling Block tags auto-suggest/ autocomplete [#5].
+	//See: /wp-admin/js/post.js; /wp-includes/js/jquery/suggest.js
+
+	//http://stackoverflow.com/questions/31044/is-there-an-exists-function-for-jquery
+	jQuery.fn.exists = function () { return this.length > 0; }
+	jQuery.fn.values = function () {
+		/*var vals = [];
+		$(this).each(function (i, el) {
+			vals.push( $(el).val() );
+		});
+		return vals;*/
+		return $(this).map(function (i, el) {
+		  return $(el).val();
+		}).get();
+	}
+
+	var custom_el = $('#juxtalearn_hub_sb_custom');
+	if (custom_el.exists()) {
+		var ajaxtag = $('div.ajaxtag');
+		$('input.tagadd-cust', ajaxtag).click(function () {
+			var custom_par = $(this).closest('.tagsdiv'), //$('#juxtalearn_hub_sb')
+				nm = '__tax_input[juxtalearn_hub_sb][]',
+				newtags = $('input.newtag', custom_par).val().replace(/, ?$/, ''),
+				tags = $('input', custom_el),
+				tagsval = tags.values(),
+				checked = tags.filter(':checked').values();
+
+			console.log('>>NDF: ', newtags, tagsval, checked);
+
+			$('input.newtag', custom_par).val("");
+
+			var tags_r = newtags.split(',');
+			for (var it in tags_r) {
+				var tag = tags_r[it];
+			
+				if ($.inArray(tag, checked) > -1) {
+					// Tag already ticked - do nothing.
+					console.log('Do nothing!');
+				}
+				else if ($.inArray(tag, tagsval) > -1) {
+					tags.filter('[value = "'+ tag +'"]').attr('checked', '');
+				}
+				else {
+					custom_el.append(
+					'<label><input type="checkbox" checked name="'+ nm +'" value="'+
+					tag +'"/>'+ tag +'</label> ');
+				}
+			}
+		});
+	}
 });
 
 function inheritTrickyTopicVals(tt_id){
@@ -79,10 +130,26 @@ function inheritTrickyTopicVals(tt_id){
 			$('#juxtalearn_hub_country').val($data.juxtalearn_hub_country[0]);
 			$('#juxtalearn_hub_location_id_field').val($data.juxtalearn_hub_location_id_field);
 			$('#juxtalearn_hub_location_id').val($data.juxtalearn_hub_location_id);
+		//NDF: Part 2: Stumbling Block tags auto-suggest/ autocomplete [#5].
+		//if ('check' === $('#custom-sb-meta-box-type').val()) {
+		var custom_el = $('#juxtalearn_hub_sb_custom');
+		if (custom_el.exists()) {
+			//console.log($data.juxtalearn_hub_sb);
+			var checks = '';
+			for (var it in $data.juxtalearn_hub_sb) {
+				var sb = $data.juxtalearn_hub_sb[it];
+				var nm = '__tax_input[juxtalearn_hub_sb][]';
+				checks += '<label><input type="checkbox" name="'+ nm +'" value="'+
+						sb +'"/>'+ sb +'</label> ';
+			}
+			custom_el.html(checks);
+		} else {
+		// Martin's original.
 			$('#tax-input-juxtalearn_hub_sb').val('');
 			$('#juxtalearn_hub_sb .tagchecklist').empty();
 			$('#new-tag-juxtalearn_hub_sb').val($data.juxtalearn_hub_sb.join(","));
 			tagBox.flushTags($('#new-tag-juxtalearn_hub_sb').closest('.tagsdiv'));
+		}
 			$('#juxtalearn_hub_trickytopic_id').val(tt_id).focus();
 		}
 	});

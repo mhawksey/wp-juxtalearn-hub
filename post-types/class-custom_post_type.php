@@ -97,6 +97,19 @@ class Juxtalearn_Hub_CustomPostType {
 				}
 			}
 		}
+
+		//NDF:
+		$tax = 'juxtalearn_hub_sb';
+		$pin = '__tax_input';
+		if (isset($_POST[$pin]) && isset($_POST[$pin][$tax])) {
+			$terms = $_POST[$pin][$tax];
+			@header("X-tax-input-$tax: ". json_encode($terms));
+			#$_POST['tax_input'][$fname] = implode(',', $terms);
+			$ret = wp_set_post_terms($post_id, $terms, $tax);
+		}
+
+		@header("X-save-post: 1; tid=". json_encode($ret)); #. json_encode($_POST));
+
 		return $b_continue;
 	} // END public function save_post($post_id)
 	

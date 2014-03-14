@@ -611,4 +611,9 @@ display:none;
 }
 
 
+/*NDF: */
+#juxtalearn_hub_sb_custom label {
+	display: inline-block;
+	margin-right: 4px;
+}
 

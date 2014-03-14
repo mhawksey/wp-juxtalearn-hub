@@ -235,7 +235,16 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 		remove_meta_box('tagsdiv-juxtalearn_hub_education_level',$this->post_type,'side');
 		remove_meta_box('tagsdiv-juxtalearn_hub_sb',$this->post_type,'side');
 		//remove_meta_box('fzisotope_categoriesdiv', 'fzisotope_post', 'side');
-		add_meta_box( 'tagsdiv-juxtalearn_hub_sb', 'Stumbling Blocks', 'post_tags_meta_box', $this->post_type, 'side', 'low', array( 'taxonomy' => 'juxtalearn_hub_sb' ));
+		//NDF:
+		add_meta_box(
+			'tagsdiv-juxtalearn_hub_sb',
+			__('Stumbling Blocks'),
+			array(&$this, 'custom_sb_meta_box'), //'post_tags_meta_box'
+			$this->post_type,
+			'side',
+			'low',
+			array( 'taxonomy' => 'juxtalearn_hub_sb' )
+		);
 		
 		add_meta_box( 
 			sprintf('wp_juxtalearn_hub_%s_tax_tool_section', $this->post_type),
@@ -256,7 +265,38 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 		);
 		
 	} // END public function add_meta_boxes()
-	
+
+	/**NDF: Stumbling Block tags widget [#5].
+	 */
+	public function custom_sb_meta_box( $post, $box ) {
+		// ?tags-ui=classic|wordpress|wp
+		if (isset($_GET['tags-ui']) && preg_match('/^(c|w)/', $_GET['tags-ui'])):
+			post_tags_meta_box($post, $box);
+		else:
+		?><pre><?php
+			#var_dump($this->options);
+		?></pre>
+		<div class=tagsdiv id=juxtalearn_hub_sb ><!--HACK: -->
+		<div class="ajaxtag hide-if-no-js">
+		  <label class=screen-reader-text for="new-tag-juxtalearn_hub_sb">Stumbling Blocks</label>
+		  <div class=taghint >Add New Stumbling Block</div>
+		  <p><input id=new-tag-juxtalearn_hub_sb name="newtag[juxtalearn_hub_sb]" class="newtag form-input-tip" size="16" autocomplete="off" value="">
+		  <input type=button class="button tagadd-cust" value="Add"></p>
+	    </div>
+			<input type=hidden id=custom-sb-meta-box-type value=check />
+			<div id=juxtalearn_hub_sb_custom >
+		<?php
+			$nm = '__tax_input[juxtalearn_hub_sb][]';
+			$term_list = wp_get_post_terms($post->ID, 'juxtalearn_hub_sb',
+				array('fields'=>'names'));
+			foreach ($term_list as $tm):
+				?><label><input type=checkbox checked name="<?php echo $nm ?>"
+					value="<?php echo $tm ?>"><?php echo $tm ?></label> <?php
+			endforeach;
+		?></div></div><?php
+		endif;
+    }
+
 	public function columns($columns) {
 		return array_slice($columns, 0, 3, true) +
 				array('juxtalearn_hub_trickytopic_id' => __( 'Tricky Topic' )) +
@@ -284,6 +324,7 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 	 */
 	public function save_post($post_id)
 	{
+		// IMPORTANT: call the parent method.
 		$b_continue = parent::save_post($post_id);
 
 		if (!$b_continue) return;
