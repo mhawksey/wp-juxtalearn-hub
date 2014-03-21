@@ -97,12 +97,12 @@ class JuxtaLearn_Hub_Shortcode_Tricky_Topic_Summary extends JuxtaLearn_Hub_Short
      * @return array Get array of links.
      */
     function print_get_nodes_links($hposts, &$nodes, $post_id) {
-        $base_link = get_permalink();
+        $base_link = home_url() .'/';
         $links = array();
         $nodesList = array();
 		$hposts_title = get_the_title($post_id);
 			
-		$nodes[] = array("name" => $hposts_title, "url" => $base_link, "id" => $post_id, "type" => "trickytopic" );
+		$nodes[] = array("name" => $hposts_title, "url" => get_permalink(), "id" => $post_id, "type" => "trickytopic" );
 
         // get polarity and sector terms
 			$posttypes = array('student_problem','teaching_activity');
