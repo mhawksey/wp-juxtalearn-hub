@@ -78,6 +78,12 @@ text-align:left;
 #fullscreen-button { 
 	text-align: right;
 }
+#fullscreen-button .el-icon-fullscreen:before {
+	display: inline-block;
+	text-decoration: none;
+	padding-right: 4px;
+	vertical-align: middle;
+}
 .leaflet-popup .popt{
 	display: table
 }
