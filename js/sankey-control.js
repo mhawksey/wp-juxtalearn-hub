@@ -1,4 +1,9 @@
 window.onload=function(){   
+
+  if (!window.d3) {
+    return;
+  }
+
 var units = "connections";
  
 

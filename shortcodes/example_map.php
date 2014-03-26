@@ -146,15 +146,13 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
           <div id="juxtalearn-map">
 
 <!--[if lte IE 8]>
-            <div class=map-no-js >
+            <div class="jl-chart-no-js">
               <p>Unfortunately, the map doesn't work in older browsers. Please <a
                 href="http://whatbrowser.org/">try a different browser</a>.</p>
             </div>
 <![endif]-->
 
-                <div id="loading">
-                    Loading map...
-                </div>
+                <div id="loading" class="jl-chart-loading">Loading map...</div>
 
             <header>
                 <h1>OER Research Hub - Example Map</h1>

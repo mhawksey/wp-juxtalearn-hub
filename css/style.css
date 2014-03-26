@@ -185,14 +185,16 @@ blockquote {
 
 /* Internet Explorer <= 8 message.
 */
-.map-no-js {
+.jl-chart-no-js, .map-no-js {
   text-align: center;
   font-size: 1.2em;
   border: 1px solid #bbb;
   background: #f6f6f6;
   padding: 5px;
 }
-.ie8 #juxtalearn-map #loading {
+.ie8 #juxtalearn-map #loading,
+.ie8 .jl-chart-loading,
+.jl-chart-loading.hide {
   display: none;
 }
 
