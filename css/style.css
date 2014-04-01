@@ -205,3 +205,10 @@ blockquote {
   display: none;
 }
 
+/* Error style: wp-jux..-hub/css/admin.css#.ui-state-error */
+.jl-error-msg {
+  border: 1px solid #cd0a0a;
+  color: #cd0a0a;
+  padding: 3px;
+  text-align: center;
+}
