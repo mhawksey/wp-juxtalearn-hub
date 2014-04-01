@@ -18,7 +18,12 @@ class Juxtalearn_Hub_CustomPostType {
 	* The Constructor
 	*
 	*/
-	public function __construct() {
+	public function __construct( $as_wp_plugin = TRUE ) {
+
+		if (!$as_wp_plugin) {
+			return;
+		}
+
 		// register actions
 		add_action('init', array(&$this, 'init'));
 		add_action('init', array(&$this, 'set_options'));
