@@ -205,6 +205,16 @@ blockquote {
   display: none;
 }
 
+/* MSIE 9+ */
+[data-ua *= "MSIE"].not-ie #juxtalearn-map > svg {
+  min-height: 530px;
+  overflow: hidden;
+}
+[data-ua *= "MSIE 10"] #fullscreen-button {
+  display: none;
+}
+
+
 /* Error style: wp-jux..-hub/css/admin.css#.ui-state-error */
 .jl-error-msg {
   border: 1px solid #cd0a0a;
