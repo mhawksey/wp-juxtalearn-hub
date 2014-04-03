@@ -38,7 +38,7 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 					'not_found_in_trash' => __(sprintf('No found in Trash%s', $this->plural)),
 				),
 				'public' => true,
-				'description' => __("An example of a Student Problem"),
+				'description' => __("An example of a Student Problem", self::LOC_DOMAIN),
 				'supports' => array(
 					'title', 'editor', 'excerpt', 'author' 
 				),
@@ -77,7 +77,7 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'select',
 				'save_as' => 'post_meta',
 				'position' => 'side',
-				'label' => "Tricky Topic",
+				'label' => __('Tricky Topic', self::LOC_DOMAIN),
 				'options' => $trickytopic_options,
 				),
 		));
@@ -87,7 +87,7 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 				'save_as' => 'term',
 				'position' => 'side',
 				'quick_edit' => true,
-				'label' => 'Education Level',
+				'label' => __('Education Level', self::LOC_DOMAIN),
 				'options' => get_terms('juxtalearn_hub_education_level', 'hide_empty=0&orderby=id'),
 				)
 		 ));
@@ -96,26 +96,19 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'select',
 				'save_as' => 'term',
 				'position' => 'side',
-				'label' => "Country",
+				'label' => __('Country', self::LOC_DOMAIN),
 				'options' => get_terms('juxtalearn_hub_country', 'hide_empty=0'),
 				),
 		 ));
+		 // 'location_id' array_merge was duplicated?!
 		 $this->options = array_merge($this->options, array(
 			'location_id' => array(
 				'type' => 'location',
 				'save_as' => 'post_meta',
 				'position' => 'side',
-				'label' => 'Location',
-				'descr' => 'Optional field to associate example to a location',
-				)
-		 ));
-		 $this->options = array_merge($this->options, array(
-			'location_id' => array(
-				'type' => 'location',
-				'save_as' => 'post_meta',
-				'position' => 'side',
-				'label' => 'Location',
-				'descr' => 'Optional field to associate example to a location',
+				'label' => __('Location', self::LOC_DOMAIN),
+				'descr' =>
+				__('Optional field to associate example to a location', self::LOC_DOMAIN),
 				)
 		 ));
 		 $this->options = array_merge($this->options, array(
@@ -123,7 +116,7 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'text',
 				'save_as' => 'post_meta',
 				'position' => 'bottom',
-				'label' => 'Link'
+				'label' => __('Link', self::LOC_DOMAIN),
 				)
 		 ));
 		 $this->options = array_merge($this->options, array(
@@ -131,7 +124,7 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'checkbox',
 				'save_as' => 'post_meta',
 				'position' => 'tax_tool',
-				'label' => 'One term refers to multiple concepts'
+				'label' => __('One term refers to multiple concepts', self::LOC_DOMAIN)
 				)
 		 ));
 		 $this->options = array_merge($this->options, array(
@@ -139,7 +132,7 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'checkbox',
 				'save_as' => 'post_meta',
 				'position' => 'tax_tool',
-				'label' => 'Once concept has many scientific names'
+				'label' => __('One concept has many scientific names', self::LOC_DOMAIN)
 				)
 		 ));
 		 $this->options = array_merge($this->options, array(
@@ -147,7 +140,7 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'checkbox',
 				'save_as' => 'post_meta',
 				'position' => 'tax_tool',
-				'label' => 'Scientific use of everyday language'
+				'label' => __('Scientific use of everyday language', self::LOC_DOMAIN)
 				)
 		 ));
 		 $this->options = array_merge($this->options, array(
@@ -155,7 +148,8 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'checkbox',
 				'save_as' => 'post_meta',
 				'position' => 'tax_tool',
-				'label' => 'Understanding of Scientific method, process and practice'
+				'label' =>
+			__('Understanding of Scientific method, process and practice', self::LOC_DOMAIN)
 				)
 		 ));
 		 $this->options = array_merge($this->options, array(
@@ -163,7 +157,7 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'checkbox',
 				'save_as' => 'post_meta',
 				'position' => 'tax_tool',
-				'label' => 'Underpinning understandings'
+				'label' => __('Underpinning understandings', self::LOC_DOMAIN),
 				)
 		 ));
 		 $this->options = array_merge($this->options, array(
@@ -171,7 +165,7 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'checkbox',
 				'save_as' => 'post_meta',
 				'position' => 'tax_tool',
-				'label' => 'Underpinning concepts'
+				'label' => __('Underpinning concepts', self::LOC_DOMAIN),
 				)
 		 ));
 		 $this->options = array_merge($this->options, array(
@@ -179,7 +173,7 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'checkbox',
 				'save_as' => 'post_meta',
 				'position' => 'tax_tool',
-				'label' => 'Complementary concepts'
+				'label' => __('Complementary concepts', self::LOC_DOMAIN),
 				)
 		 ));
 		 $this->options = array_merge($this->options, array(
@@ -187,7 +181,7 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'checkbox',
 				'save_as' => 'post_meta',
 				'position' => 'tax_tool',
-				'label' => 'Weak human-like or world-like analogy '
+				'label' => __('Weak human-like or world-like analogy', self::LOC_DOMAIN)
 				)
 		 ));
 		 $this->options = array_merge($this->options, array(
@@ -195,7 +189,8 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'checkbox',
 				'save_as' => 'post_meta',
 				'position' => 'tax_tool',
-				'label' => 'Key characteristic conveys group membership'
+				'label' =>
+				__('Key characteristic conveys group membership', self::LOC_DOMAIN)
 				)
 		 ));
 		 $this->options = array_merge($this->options, array(
@@ -203,7 +198,7 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'checkbox',
 				'save_as' => 'post_meta',
 				'position' => 'tax_tool',
-				'label' => 'Flawed causal reasoning'
+				'label' => __('Flawed causal reasoning', self::LOC_DOMAIN),
 				)
 		 ));
 
@@ -298,7 +293,7 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 		//NDF:
 		add_meta_box(
 			'tagsdiv-juxtalearn_hub_sb',
-			__('Stumbling Blocks'),
+			__('Stumbling Blocks', self::LOC_DOMAIN),
 			array(&$this, 'custom_sb_meta_box'), //'post_tags_meta_box'
 			$this->post_type,
 			'side',
@@ -308,7 +303,7 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 		
 		add_meta_box( 
 			sprintf('wp_juxtalearn_hub_%s_tax_tool_section', $this->post_type),
-			'Taxonomy: Why do students have this problem? Select all that apply.',
+			__('Taxonomy: Why do students have this problem? Select all that apply.', self::LOC_DOMAIN),
 			array(&$this, 'add_inner_meta_boxes_tax_tool'),
 			$this->post_type,
 			'normal',
@@ -338,10 +333,13 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 		?></pre>
 		<div class=tagsdiv id=juxtalearn_hub_sb ><!--HACK: -->
 		<div class="ajaxtag hide-if-no-js">
-		  <label class=screen-reader-text for="new-tag-juxtalearn_hub_sb">Stumbling Blocks</label>
-		  <div class=taghint >Add New Stumbling Block</div>
+		  <label class=screen-reader-text for="new-tag-juxtalearn_hub_sb"><?php
+		        echo __('Stumbling Blocks', self::LOC_DOMAIN) ?></label>
+		  <div class=taghint ><?php
+		        echo __('Add New Stumbling Block', self::LOC_DOMAIN) ?></div>
 		  <p><input id=new-tag-juxtalearn_hub_sb name="newtag[juxtalearn_hub_sb]" class="newtag form-input-tip" size="16" autocomplete="off" value="">
-		  <input type=button class="button tagadd-cust" value="Add"></p>
+		  <input type=button class="button tagadd-cust" value="<?php
+		        echo __('Add', self::LOC_DOMAIN) ?>"></p>
 	    </div>
 			<input type=hidden id=custom-sb-meta-box-type value=check />
 			<div id=juxtalearn_hub_sb_custom >
@@ -370,7 +368,7 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 			$trickytopic_id = get_post_meta( $post_id, $column, true );
 			$trickytopic = get_the_title($trickytopic_id);
 			if ( empty( $trickytopic ) )
-				echo __( 'Empty' );
+				echo __( 'Empty', self::LOC_DOMAIN );
 			else
 				printf( __( '<a href="?post_type=student_problem&trickytopic_id=%s">%s</a>' ), $trickytopic_id, ucwords($trickytopic) );
 			break;

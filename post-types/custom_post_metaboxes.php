@@ -64,7 +64,8 @@
 							name="<?php echo $name; ?>_field"
 							id="<?php echo $name; ?>_field"
 							value="<?php if ($value) { echo get_the_title($value);} ?>"
-                            placeholder="Start typing a <?php echo $option['type'];?>"
+                            placeholder="<?php echo
+                              __('Start typing a location', self::LOC_DOMAIN) ?>"
 						/><?php if ($option['descr']){?>
                         <span class="description"><?php echo $option['descr'] ?></span>
                         <?php } ?>
@@ -171,14 +172,16 @@
 						/>
                      <?php } else if ($option['type'] == 'add_link') { ?>
 						<?php if (isset($_GET['post'])) { 
-								printf( __( '<a href="post-new.php?post_type=student_problem&tt_id=%s">Add an example</a>' ), $post_id );
+								printf( '<a href="post-new.php?post_type=student_problem&tt_id=%s">', $post_id ) .
+								__( 'Add an example', self::LC_DOMAIN ) . '</a>';
 						} else {
-								echo "Save/Publish to add an example";	
+								echo __('Save/Publish to add an example', self::LC_DOMAIN);	
 						}
                         ?>
                      <?php } else if ($option['type'] == 'add_another_link') { ?>
 						
-								<?php printf( __( '<a href="post-new.php?post_type=student_problem&tt_id=%s">Add another example</a>' ), $_GET['tt_id'] ); ?>
+								<?php printf( '<a href="post-new.php?post_type=student_problem&tt_id=%s">', $_GET['tt_id'] ) .
+								__( 'Add another example', self::LC_DOMAIN ) . '</a>'; ?>
 						
                         
 					<?php } else echo 'unknown option type '.$option['type']; ?>
