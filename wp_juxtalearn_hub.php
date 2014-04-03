@@ -45,6 +45,8 @@ if(!class_exists('JuxtaLearn_Hub'))
 {
 	class JuxtaLearn_Hub
 	{
+		const LOC_DOMAIN = 'juxtalearn-hub';
+
 		static $post_types = array(); 
 		
 		/**
@@ -386,17 +388,17 @@ if(!class_exists('JuxtaLearn_Hub'))
     	*/
 		public static function get_taxonomy_args($tax_single, $tax_plural, $custom_slug = false){
 			$labels = array(
-				'name'                => sprintf( _x( '%s', 'taxonomy general name', 'juxtalearn_hub' ), $tax_plural ),
-			    'singular_name'       => sprintf( _x( '%s', 'taxonomy singular name', 'juxtalearn_hub' ), $tax_single ),
-			    'search_items'        => sprintf( __( 'Search %s', 'juxtalearn_hub' ), $tax_plural ),
-			    'all_items'           => sprintf( __( 'All %s', 'juxtalearn_hub' ), $tax_plural ),
-			    'parent_item'         => sprintf( __( 'Parent %s', 'juxtalearn_hub' ), $tax_single ),
-			    'parent_item_colon'   => sprintf( __( 'Parent %s:', 'juxtalearn_hub' ), $tax_single ),
-			    'edit_item'           => sprintf( __( 'Edit %s', 'juxtalearn_hub' ), $tax_single ),
-			    'update_item'         => sprintf( __( 'Update %s', 'juxtalearn_hub' ), $tax_single ),
-			    'add_new_item'        => sprintf( __( 'Add New %s', 'juxtalearn_hub' ), $tax_single ),
-			    'new_item_name'       => sprintf( __( 'New %s Name', 'juxtalearn_hub' ), $tax_single ),
-			    'menu_name'           => sprintf( __( '%s', 'juxtalearn_hub' ), $tax_plural )
+				'name'                => sprintf( _x( '%s', 'taxonomy general name', self::LOC_DOMAIN ), $tax_plural ),
+			    'singular_name'       => sprintf( _x( '%s', 'taxonomy singular name', self::LOC_DOMAIN ), $tax_single ),
+			    'search_items'        => sprintf( __( 'Search %s', self::LOC_DOMAIN ), $tax_plural ),
+			    'all_items'           => sprintf( __( 'All %s', self::LOC_DOMAIN ), $tax_plural ),
+			    'parent_item'         => sprintf( __( 'Parent %s', self::LOC_DOMAIN ), $tax_single ),
+			    'parent_item_colon'   => sprintf( __( 'Parent %s:', self::LOC_DOMAIN ), $tax_single ),
+			    'edit_item'           => sprintf( __( 'Edit %s', self::LOC_DOMAIN ), $tax_single ),
+			    'update_item'         => sprintf( __( 'Update %s', self::LOC_DOMAIN ), $tax_single ),
+			    'add_new_item'        => sprintf( __( 'Add New %s', self::LOC_DOMAIN ), $tax_single ),
+			    'new_item_name'       => sprintf( __( 'New %s Name', self::LOC_DOMAIN ), $tax_single ),
+			    'menu_name'           => sprintf( __( '%s', self::LOC_DOMAIN ), $tax_plural )
 				
 			);
 		

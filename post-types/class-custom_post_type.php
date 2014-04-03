@@ -7,6 +7,9 @@
  * @subpackage Juxtalearn_Hub_CustomPostType
  */
 class Juxtalearn_Hub_CustomPostType {
+
+	const LOC_DOMAIN = JuxtaLearn_Hub::LOC_DOMAIN;
+
 	public $post_type = "custom_post_type";
 	public $archive_slug = false; // use pluralized string if you want an archive page
 	public $singular = "Item";
