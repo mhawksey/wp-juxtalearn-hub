@@ -38,7 +38,7 @@ class Teaching_Activity_Template extends Juxtalearn_Hub_CustomPostType
 					'not_found_in_trash' => __(sprintf('No found in Trash%s', $this->plural)),
 				),
 				'public' => true,
-				'description' => __("An example of a Student Problem"),
+				'description' => __('An example of a Student Problem', self::LOC_DOMAIN),
 				'supports' => array(
 					'title', 'editor', 'excerpt', 'author' 
 				),
@@ -78,7 +78,7 @@ class Teaching_Activity_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'select',
 				'save_as' => 'post_meta',
 				'position' => 'side',
-				'label' => "Tricky Topic",
+				'label' => __('Tricky Topic', self::LOC_DOMAIN),
 				'options' => $trickytopic_options,
 				),
 		));
@@ -88,7 +88,7 @@ class Teaching_Activity_Template extends Juxtalearn_Hub_CustomPostType
 				'save_as' => 'term',
 				'position' => 'side',
 				'quick_edit' => true,
-				'label' => 'Education Level',
+				'label' => __('Education Level', self::LOC_DOMAIN),
 				'options' => get_terms('juxtalearn_hub_education_level', 'hide_empty=0&orderby=id'),
 				)
 		 ));
@@ -97,7 +97,7 @@ class Teaching_Activity_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'select',
 				'save_as' => 'term',
 				'position' => 'side',
-				'label' => "Country",
+				'label' => __('Country', self::LOC_DOMAIN),
 				'options' => get_terms('juxtalearn_hub_country', 'hide_empty=0'),
 				),
 		 ));
@@ -106,8 +106,8 @@ class Teaching_Activity_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'location',
 				'save_as' => 'post_meta',
 				'position' => 'side',
-				'label' => 'Location',
-				'descr' => 'Optional field to associate example to a location',
+				'label' => __('Location', self::LOC_DOMAIN),
+				'descr' => __('Optional field to associate example to a location', self::LOC_DOMAIN),
 				)
 		 ));
 		 $this->options = array_merge($this->options, array(
@@ -115,7 +115,7 @@ class Teaching_Activity_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'text',
 				'save_as' => 'post_meta',
 				'position' => 'bottom',
-				'label' => 'Link'
+				'label' => __('Link', self::LOC_DOMAIN),
 				)
 		 ));
 
@@ -174,7 +174,8 @@ class Teaching_Activity_Template extends Juxtalearn_Hub_CustomPostType
 			if ( empty( $trickytopic ) )
 				echo __( 'Empty' );
 			else
-				printf( __( '<a href="?post_type=teaching_activity&trickytopic_id=%s">%s</a>' ), $trickytopic_id, ucwords($trickytopic) );
+				printf( '<a href="?post_type=teaching_activity&trickytopic_id=%s">%s</a>',
+					$trickytopic_id, ucwords($trickytopic) );
 			break;
 		default :
 			break;

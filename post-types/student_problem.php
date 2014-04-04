@@ -370,7 +370,8 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 			if ( empty( $trickytopic ) )
 				echo __( 'Empty', self::LOC_DOMAIN );
 			else
-				printf( __( '<a href="?post_type=student_problem&trickytopic_id=%s">%s</a>' ), $trickytopic_id, ucwords($trickytopic) );
+				printf( '<a href="?post_type=student_problem&trickytopic_id=%s">%s</a>',
+					$trickytopic_id, ucwords($trickytopic) );
 			break;
 		default :
 			break;

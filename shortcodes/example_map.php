@@ -152,10 +152,11 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
             </div>
 <![endif]-->
 
-                <div id="loading" class="jl-chart-loading">Loading map...</div>
+                <div id="loading" class="jl-chart-loading"><?php
+                    echo __('Loading map...', self::LOC_DOMAIN) ?></div>
 
             <header>
-                <h1>OER Research Hub - Example Map</h1>
+                <h1><?php echo __('JuxtaLearn - Example Map', self::LOC_DOMAIN) ?></h1>
             </header>
             <div id="impressum">
                 <small>

@@ -64,7 +64,8 @@ class JuxtaLearn_Hub_Shortcode_Tricky_Topic_Summary extends JuxtaLearn_Hub_Short
 			href="http://whatbrowser.org/">try a different browser</a>.
 			</div>
 <![endif]-->
-			<div id="loading" class="jl-chart-loading">Loading chart...</div>
+			<div id="loading" class="jl-chart-loading"><?php
+				echo __('Loading chart...', self::LOC_DOMAIN) ?></div>
 
 		</div>
 		<?php
