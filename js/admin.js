@@ -43,6 +43,8 @@ jQuery( document ).ready(function($) {
 })
 
 jQuery(function($) {
+	//if (!$('').tabs) { return window.console && console.log("No 'tabs'"); }
+
 	$( "#juxtalearn_hub_tax_tabs" ).tabs({                                                                  
             activate: function(event,ui){ 
 							$('.tax_term').hide();                                                     
@@ -88,17 +90,17 @@ jQuery(function($) {
 				tagsval = tags.values(),
 				checked = tags.filter(':checked').values();
 
-			console.log('>>NDF: ', newtags, tagsval, checked);
+			//console.log('>>NDF: ', newtags, tagsval, checked);
 
 			$('input.newtag', custom_par).val("");
 
 			var tags_r = newtags.split(',');
 			for (var it in tags_r) {
-				var tag = tags_r[it];
-			
-				if ($.inArray(tag, checked) > -1) {
+				var tag = $.trim(tags_r[it]);
+
+				if (""== tag || $.inArray(tag, checked) > -1) {
 					// Tag already ticked - do nothing.
-					console.log('Do nothing!');
+					window.console && console.log('Do nothing!');
 				}
 				else if ($.inArray(tag, tagsval) > -1) {
 					tags.filter('[value = "'+ tag +'"]').attr('checked', '');
