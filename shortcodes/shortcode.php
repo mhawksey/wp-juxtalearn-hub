@@ -13,7 +13,10 @@ abstract class JuxtaLearn_Hub_Shortcode {
 	public $shortcode = 'juxtalearn_hub_shortcode';
 	public $defaults = array();
 	public $options = array();
-	
+
+	const LOC_DOMAIN = JuxtaLearn_Hub::LOC_DOMAIN;
+
+
 	function __construct() {
 		add_shortcode($this->shortcode, array(&$this, 'shortcode'));
 		add_filter('the_content', array(&$this, 'pre_add_to_page'));
