@@ -222,3 +222,37 @@ blockquote {
   padding: 3px;
   text-align: center;
 }
+
+
+/* Search results */
+/*.search-results article .entry-title:after {
+  color: #8DC919;
+  font-size: medium;
+  float: right;
+}
+.search-results article .entry-summary {
+  clear: right;
+}
+.search-results .type-student_problem .entry-title:after {
+  content: "Student Problem";
+}
+.search-results .type-tricky_topic .entry-title:after {
+  content: "Tricky Topic";
+}
+.search-results .type-teaching_activity .entry-title:after {
+  content: "Teaching Activity";
+}*/
+.search-results .entry-type {
+  position: relative;
+  top: -80px;
+  text-align: right;
+  color: #8DC919;
+  font-size: medium;
+  height: 2px;
+}
+.search-results .entry-header {
+  margin-bottom: 10px;
+}
+.search-results .site-content article {
+  margin-bottom: 1.8rem;
+}

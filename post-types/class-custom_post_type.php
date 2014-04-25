@@ -37,10 +37,15 @@ class Juxtalearn_Hub_CustomPostType {
 		// add filters
 		add_filter('post_type_link', array(&$this, 'custom_post_type_link'), 1, 3);
 		add_action('edit_form_after_title', array(&$this, 'foo_move_deck'),999);
+
+		add_filter( 'the_excerpt', array(&$this, 'search_excerpt') );
+		add_filter( 'the_content', array(&$this, 'search_excerpt') );
+
 		// push post types for caching
 		Juxtalearn_Hub::$post_types[] = $this->post_type;
+
 	} // END public function __construct()
-	
+
 	/**
 	* hook into WP's init action hook.
 	*
@@ -195,4 +200,27 @@ class Juxtalearn_Hub_CustomPostType {
 	public function column($column, $post_id) {
 		
 	}
+
+	/**
+	* Filter to fix formatting of search results.
+	http://stackoverflow.com/questions/19755876/wordpress-customize-search-results-for-custom-post-types
+	*/
+	public function search_excerpt( $content ) {
+		global $post;
+
+		if ( is_search() ) {
+			$sc = new JuxtaLearn_Hub_Shortcode_Example_Meta();
+
+			$content =
+			    '<div class=entry-type >'.
+			    ucwords(str_replace('_', ' ', $post->post_type)) .'</div>'.
+				$post->post_content .
+				$sc->meta_bar((array) $post, 'sb, subject, country', TRUE);
+
+			// maybe add a read more link
+			// also, you can use global $post to access the current search result
+		}
+		return $content;
+	}
+
 }

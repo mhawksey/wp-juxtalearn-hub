@@ -52,17 +52,19 @@ abstract class JuxtaLearn_Hub_Shortcode {
 	function add_to_page($content) {
 		return $content;
 	}
-	
-	function meta_bar($post, $options){
+
+	public function meta_bar($post, $options = 'sb', $return = FALSE) {
 		$MY_SEP = ' | ';
 
+		$result = '';
 		$out = array();
 		foreach (explode(',', $options) as $type) {
 			$type = trim($type);
 			$slug = $type."_slug";
 			if ($type == 'sb'){
+
 				$tags =wp_get_post_terms( $post['ID'], 'juxtalearn_hub_'.$type);
-				$ln = '<span class="meta_label">Stumbling Blocks</span>: ';
+				$ln = '<span class="meta_label">'. __('Stumbling Blocks:', self::LOC_DOMAIN) .'</span> ';
 				foreach($tags as $idx => $tag){
 					$sep = $idx > 0 ? $MY_SEP : '';
 					$ln .= $sep . '<a href="'.get_term_link($tag).'">'.$tag->name.'</a>';
@@ -82,11 +84,15 @@ abstract class JuxtaLearn_Hub_Shortcode {
 			}
 		}
 		$out = array_filter($out);
-		if(!empty($out)){ 
-			echo '<div class="juxtalearn-meta">'.implode($MY_SEP, $out).'</div>';
-       }	
+		if (!empty($out)) {
+			$result = '<div class="juxtalearn-meta">'.implode($MY_SEP, $out).'</div>';
+		}
+		if ($return) {
+			return $result;
+		}
+		echo $result;
 	}
-	
+
 	function get_meta($post, $type, $slug = false, $idx = false){
 		if (!isset($post[$type]) || $post[$type] == ""){
 			return;
