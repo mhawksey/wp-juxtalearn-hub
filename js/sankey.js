@@ -296,7 +296,10 @@ d3.sankey = function() {
   function value(link) {
     return link.value;
   }
- 
+
+
+  window.jQuery && jQuery('.jl-chart-loading').hide();
+
   return sankey;
 };
 

@@ -172,16 +172,17 @@
 						/>
                      <?php } else if ($option['type'] == 'add_link') { ?>
 						<?php if (isset($_GET['post'])) { 
-								printf( '<a href="post-new.php?post_type=student_problem&tt_id=%s">', $post_id ) .
-								__( 'Add an example', self::LOC_DOMAIN ) . '</a>';
+							printf( '<a href="post-new.php?post_type=student_problem&tt_id=%s">', $post_id );
+							echo __( 'Add an example', 'self::LOC_DOMAIN' ) . '</a>';
 						} else {
 								echo __('Save/Publish to add an example', self::LOC_DOMAIN);	
 						}
                         ?>
                      <?php } else if ($option['type'] == 'add_another_link') { ?>
-						
-								<?php printf( '<a href="post-new.php?post_type=student_problem&tt_id=%s">', $_GET['tt_id'] ) .
-								__( 'Add another example', self::LOC_DOMAIN ) . '</a>'; ?>
+							<?php
+							$tt_id = isset($_GET['tt_id']) ? $_GET['tt_id'] : NULL;
+							printf( '<a href="post-new.php?post_type=student_problem&tt_id=%s">', $tt_id );
+							echo __( 'Add another example', self::LOC_DOMAIN ) .'</a>'; ?>
 						
                         
 					<?php } else echo 'unknown option type '.$option['type']; ?>
