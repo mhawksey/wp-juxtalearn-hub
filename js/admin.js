@@ -40,12 +40,12 @@ jQuery( document ).ready(function($) {
 	$('div[class$="desc"]').show();
 	$('.tabs-text').show();
 	$( "#juxtalearn_hub_tax_tabs" ).show();
-})
+});
 
 jQuery(function($) {
 	//if (!$('').tabs) { return window.console && console.log("No 'tabs'"); }
 
-	$( "#juxtalearn_hub_tax_tabs" ).tabs({                                                                  
+	$('').tabs && $( "#juxtalearn_hub_tax_tabs" ).tabs({
             activate: function(event,ui){ 
 							$('.tax_term').hide();                                                     
                             $('.tax_term').hide();
