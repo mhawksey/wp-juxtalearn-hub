@@ -388,9 +388,21 @@ class Student_Problem_Template extends Juxtalearn_Hub_CustomPostType
 
 		if (!$b_continue) return;
 
-		if (isset($_POST['tax_input'])){
-			wp_set_post_terms( $_POST['juxtalearn_hub_trickytopic_id'], $_POST['tax_input']['juxtalearn_hub_sb'], 'juxtalearn_hub_sb', true ); 
+		$tax_terms = NULL;
+		if (isset($_POST['tax_input'])) {
+			$tax_terms = $_POST['tax_input']['juxtalearn_hub_sb'];
 		}
+		elseif (isset($_POST['__tax_input'])) {
+			// Custom tags input - array.
+			$tax_terms = $_POST['__tax_input']['juxtalearn_hub_sb'];
+		}
+
+		if ($tax_terms) {
+			wp_set_post_terms( $_POST['juxtalearn_hub_trickytopic_id'], $tax_terms, 'juxtalearn_hub_sb', true ); 
+
+			@header( "X-Jxl-Hub-save-post-2: wp_set_post_terms; post_id=$post_id" );
+		}
+
 	} // END public function save_post($post_id)
 
 } // END class Post_Type_Template
