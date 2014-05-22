@@ -180,7 +180,7 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
         
         <script>
             window.addEvent('domready', function() {
-                init();
+                window.init && init();
                 //constructControlPanel('Global Oil Production & Consumption');
                 
             });
@@ -188,9 +188,12 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
         <div id="fullscreen-button"><a href="#" id="juxtalearn-map-fullscreen"><span class="el-icon-fullscreen"></span>Full Screen</a></div>
 		<script src="<?php echo plugins_url( 'lib/map/lib/bigscreen.min.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" charset="utf-8"></script>
 		<script>
+		jQuery(function () {
+
 		var element = document.getElementById('juxtalearn-map');
 
-		document.getElementById('juxtalearn-map-fullscreen').addEventListener('click', function() {
+		jQuery('#juxtalearn-map-fullscreen').on('click', function () {
+		//document.getElementById('juxtalearn-map-fullscreen').addEventListener('click', function() {
 			if (BigScreen.enabled) {
 				BigScreen.request(element, onEnterJuxtaLearnMap, onExitJuxtaLearnMap);
 				// You could also use .toggle(element, onEnter, onExit, onError)
@@ -198,7 +201,8 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
 			else {
 				// fallback for browsers that don't support full screen
 			}
-		}, false);
+		//}, false);
+		});
 		
 			// called when the first element enters full screen
 		
@@ -212,6 +216,8 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
 			jQuery('#juxtalearn-map').css('height','');
 			jQuery('#ui').hide();
 		}
+
+		});
 		</script>
 		<?php
 		return ob_get_clean();
