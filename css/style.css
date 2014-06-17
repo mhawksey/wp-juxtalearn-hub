@@ -223,6 +223,12 @@ blockquote {
   text-align: center;
 }
 
+/* Shortcodes. */
+.jxl-shortcode #content > article > .entry-meta,
+.jxl-shortcode #content > article > .entry-meta .post-edit-link {
+  x-color: red;
+  display: none;
+}
 
 /* Search results */
 /*.search-results article .entry-title:after {

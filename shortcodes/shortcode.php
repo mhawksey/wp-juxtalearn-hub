@@ -17,7 +17,7 @@ abstract class JuxtaLearn_Hub_Shortcode {
 	const LOC_DOMAIN = JuxtaLearn_Hub::LOC_DOMAIN;
 
 
-	function __construct() {
+	public function __construct() {
 		add_shortcode($this->shortcode, array(&$this, 'shortcode'));
 		add_filter('the_content', array(&$this, 'pre_add_to_page'));
 
@@ -31,7 +31,7 @@ abstract class JuxtaLearn_Hub_Shortcode {
 		$wpdb->juxtalearn_hub_shortcode_cache = $wpdb->prefix.'juxtalearn_hub_shortcode_cache';
 	}
 		
-	function shortcode($options) {
+	public function shortcode($options) {
 		$this->options = shortcode_atts($this->defaults, $options);	
 		$this->prep_options();
 		
@@ -39,17 +39,19 @@ abstract class JuxtaLearn_Hub_Shortcode {
 			$content = $this->content();
 			$this->cache($content);
 		}
-		
+
+		$this->content_end();
+
 		return $content;
 	}
 	
-	function pre_add_to_page($content) {
+	public function pre_add_to_page($content) {
 		$options = get_option('juxtalearn_hub_options');
 		$options['add_to_page'] = 1;
 		return $options['add_to_page'] ? $this->add_to_page($content) : $content;
 	}
 	
-	function add_to_page($content) {
+	protected function add_to_page($content) {
 		return $content;
 	}
 
@@ -131,7 +133,7 @@ abstract class JuxtaLearn_Hub_Shortcode {
 		return;
 	}
 	
-	function prep_options() {
+	protected function prep_options() {
 		foreach ($this->options as $key => $value) {
 			if (is_string($value)) {
 				if ($value == 'true') $this->options[$key] = true;
@@ -139,14 +141,25 @@ abstract class JuxtaLearn_Hub_Shortcode {
 			}
 		}
 	}
-	
-	abstract function content();
+
+
+	protected function content_end($shortcode = NULL) {
+		$shortcode = $shortcode ? $shortcode : get_class($this);
+		?>
+	<script>
+	document.documentElement.className += " jxl-shortcode <?php echo $shortcode ?>";
+	</script>
+<?php
+	}
+
+
+	abstract protected function content();
 
 	
 	// Caching ----------------------------------------------------------------
 
 	// TODO: doesn't $wpdb need to be globalized in this function?
-	function activate() {
+	public function activate() {
 		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 		dbDelta("CREATE TABLE $wpdb->juxtalearn_hub_shortcode_cache (
 			id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -158,23 +171,23 @@ abstract class JuxtaLearn_Hub_Shortcode {
 		);");
 	}
 	
-	function deactivate() {
+	public function deactivate() {
 		global $wpdb;
 		$wpdb->query("drop table $wpdb->juxtalearn_hub_shortcode_cache");
 	}
 	
-	function save_post($post_id) {
+	public function save_post($post_id) {
 		if (!in_array(get_post_type($post_id), JuxtaLearn_Hub::$post_types)) return;
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
 		self::clear_cache();
 	}
 		
-	function trash_post($post_id) {
+	public function trash_post($post_id) {
 		if (!in_array(get_post_type($post_id), JuxtaLearn_Hub::$post_types)) return;
 		self::clear_cache();
 	}
 		
-	function get_cache() {
+	protected function get_cache() {
 		if (!get_option('juxtalearn_hub_caching')) return false;
 		
 		global $wpdb;
@@ -188,7 +201,7 @@ abstract class JuxtaLearn_Hub_Shortcode {
 		));
 	}
 	
-	function cache($content) {
+	protected function cache($content) {
 		global $wpdb;
 		$wpdb->insert($wpdb->juxtalearn_hub_shortcode_cache, array(
 			'created' => current_time('mysql'),
@@ -198,12 +211,12 @@ abstract class JuxtaLearn_Hub_Shortcode {
 		));
 	}
 	
-	static function get_all_cache() {
+	protected static function get_all_cache() {
 		global $wpdb;
 		return $wpdb->get_results("SELECT shortcode, count(id) AS count FROM $wpdb->juxtalearn_hub_shortcode_cache GROUP BY shortcode", OBJECT);
 	}
 
-	static function clear_cache() {
+	protected static function clear_cache() {
 		global $wpdb;
 		$wpdb->query("TRUNCATE $wpdb->juxtalearn_hub_shortcode_cache");
 	}
