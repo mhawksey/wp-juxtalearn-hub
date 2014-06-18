@@ -147,7 +147,16 @@ class Teaching_Activity_Template extends Juxtalearn_Hub_CustomPostType
 		remove_meta_box('tagsdiv-juxtalearn_hub_education_level',$this->post_type,'side');
 		remove_meta_box('tagsdiv-juxtalearn_hub_sb',$this->post_type,'side');
 		//remove_meta_box('fzisotope_categoriesdiv', 'fzisotope_post', 'side');
-		add_meta_box( 'tagsdiv-juxtalearn_hub_sb', 'Stumbling Blocks', 'post_tags_meta_box', $this->post_type, 'side', 'low', array( 'taxonomy' => 'juxtalearn_hub_sb' ));
+		//NDF: [#5] [#10]
+		add_meta_box(
+			'tagsdiv-juxtalearn_hub_sb',
+			__('Stumbling Blocks', self::LOC_DOMAIN),
+			array(&$this, 'custom_sb_meta_box'), #'post_tags_meta_box'
+			$this->post_type,
+			'side',
+			'low',
+			array( 'taxonomy' => 'juxtalearn_hub_sb' )
+		);
 		add_meta_box( 
 			sprintf('wp_juxtalearn_hub_%s_section', $this->post_type),
 			sprintf('%s Information', ucwords(str_replace("_", " ", $this->post_type))),

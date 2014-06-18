@@ -223,4 +223,39 @@ class Juxtalearn_Hub_CustomPostType {
 		return $content;
 	}
 
+
+	/**NDF: Stumbling Block tags widget [#5] [#10].
+	 */
+	public function custom_sb_meta_box( $post, $box ) {
+		// ?tags-ui=classic|wordpress|wp
+		if (isset($_GET['tags-ui']) && preg_match('/^(c|w)/', $_GET['tags-ui'])):
+			post_tags_meta_box($post, $box);
+		else:
+		?><pre><?php
+			#var_dump($this->options);
+		?></pre>
+		<div class=tagsdiv id=juxtalearn_hub_sb ><!--HACK: -->
+		<div class="ajaxtag hide-if-no-js">
+		  <label class=screen-reader-text for="new-tag-juxtalearn_hub_sb"><?php
+		        echo __('Stumbling Blocks', self::LOC_DOMAIN) ?></label>
+		  <div class=taghint ><?php
+		        echo __('Add New Stumbling Block', self::LOC_DOMAIN) ?></div>
+		  <p><input id=new-tag-juxtalearn_hub_sb name="newtag[juxtalearn_hub_sb]" class="newtag form-input-tip" size="16" autocomplete="off" value="">
+		  <input type=button class="button tagadd-cust" value="<?php
+		        echo __('Add', self::LOC_DOMAIN) ?>"></p>
+	    </div>
+			<input type=hidden id=custom-sb-meta-box-type value=check />
+			<div id=juxtalearn_hub_sb_custom >
+		<?php
+			$nm = '__tax_input[juxtalearn_hub_sb][]';
+			$term_list = wp_get_post_terms($post->ID, 'juxtalearn_hub_sb',
+				array('fields'=>'names'));
+			foreach ($term_list as $tm):
+				?><label><input type=checkbox checked name="<?php echo $nm ?>"
+					value="<?php echo $tm ?>"><?php echo $tm ?></label> <?php
+			endforeach;
+		?></div></div><?php
+		endif;
+	}
+
 }
