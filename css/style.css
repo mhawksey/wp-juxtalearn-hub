@@ -230,7 +230,26 @@ blockquote {
   display: none;
 }
 
-/* Search results */
+
+/* Facetious search widget.
+*/
+.facetious_post_type [value=post],
+.facetious_post_type [value=page],
+.facetious_post_type [value=attachment],
+.facetious_post_type [value=location] {
+  display: none;
+}
+.debug .facetious_post_type [value=post],
+.debug .facetious_post_type [value=page],
+.debug .facetious_post_type [value=attachment],
+.debug .facetious_post_type [value=location] {
+  color: #999;
+  display: block;
+}
+
+
+/* Search results.
+*/
 /*.search-results article .entry-title:after {
   color: #8DC919;
   font-size: medium;
