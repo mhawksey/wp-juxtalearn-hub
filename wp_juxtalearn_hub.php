@@ -84,6 +84,10 @@ if(!class_exists('JuxtaLearn_Hub'))
 			$subject_summary = new JuxtaLearn_Hub_Shortcode_Subject_Summary();
 
 
+			#require_once(sprintf(
+			#	"%s/shortcodes/juxtalearn_taxonomy.php", JUXTALEARN_HUB_PATH));
+			#$jxl_taxonomy = new JuxtaLearn_Taxonomy_Shortcode();
+
 			// Initialize Pronamics Google Maps distro
 			if (!class_exists('Pronamic_Google_Maps_Maps')){
 			   require_once(sprintf("%s/lib/pronamic-google-maps/pronamic-google-maps.php", JUXTALEARN_HUB_PATH));
