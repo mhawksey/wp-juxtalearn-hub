@@ -83,6 +83,10 @@
 									$latLong[0] = get_post_meta($value, '_pronamic_google_maps_latitude', true );
 									$latLong[1] = get_post_meta($value, '_pronamic_google_maps_longitude', true );
 									$zoom = get_post_meta($value, '_pronamic_google_maps_zoom', true );
+									$zoom = $zoom ? $zoom : 13;
+									if ('' == $latLong[ 0 ]) {
+										$latLong = array( 0, 0 );
+									}
 									/*$maphtml = '<div id="MapHolder" style="height:260px"></div><script>var map = L.map("MapHolder").setView([0, 0], 13);
 									L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {attribution: "&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"}).addTo(map);
 									var marker = L.marker([0, 0]).addTo(map);</script>';*/
