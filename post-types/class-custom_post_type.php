@@ -7,18 +7,26 @@
  * @subpackage Juxtalearn_Hub_CustomPostType
  */
 class Juxtalearn_Hub_CustomPostType {
+
+	const LOC_DOMAIN = JuxtaLearn_Hub::LOC_DOMAIN;
+
 	public $post_type = "custom_post_type";
 	public $archive_slug = false; // use pluralized string if you want an archive page
 	public $singular = "Item";
 	public $plural = "Items";
 	
 	public $options = array();
-	
+
 	/**
 	* The Constructor
 	*
 	*/
-	public function __construct() {
+	public function __construct( $as_wp_plugin = TRUE ) {
+
+		if (!$as_wp_plugin) {
+			return;
+		}
+
 		// register actions
 		add_action('init', array(&$this, 'init'));
 		add_action('init', array(&$this, 'set_options'));
@@ -29,10 +37,15 @@ class Juxtalearn_Hub_CustomPostType {
 		// add filters
 		add_filter('post_type_link', array(&$this, 'custom_post_type_link'), 1, 3);
 		add_action('edit_form_after_title', array(&$this, 'foo_move_deck'),999);
+
+		add_filter( 'the_excerpt', array(&$this, 'search_excerpt') );
+		add_filter( 'the_content', array(&$this, 'search_excerpt') );
+
 		// push post types for caching
 		Juxtalearn_Hub::$post_types[] = $this->post_type;
+
 	} // END public function __construct()
-	
+
 	/**
 	* hook into WP's init action hook.
 	*
@@ -97,6 +110,19 @@ class Juxtalearn_Hub_CustomPostType {
 				}
 			}
 		}
+
+		//NDF:
+		$tax = 'juxtalearn_hub_sb';
+		$pin = '__tax_input';
+		if (isset($_POST[$pin]) && isset($_POST[$pin][$tax])) {
+			$terms = $_POST[$pin][$tax];
+			@header("X-Jxl-Hub-tax-input-$tax: ". json_encode($terms));
+			#$_POST['tax_input'][$fname] = implode(',', $terms);
+			$ret = wp_set_post_terms($post_id, $terms, $tax);
+		}
+
+		@header("X-Jxl-Hub-save-post: $post_id; tid=". json_encode($ret)); #. json_encode($_POST));
+
 		return $b_continue;
 	} // END public function save_post($post_id)
 	
@@ -174,4 +200,62 @@ class Juxtalearn_Hub_CustomPostType {
 	public function column($column, $post_id) {
 		
 	}
+
+	/**
+	* Filter to fix formatting of search results.
+	http://stackoverflow.com/questions/19755876/wordpress-customize-search-results-for-custom-post-types
+	*/
+	public function search_excerpt( $content ) {
+		global $post;
+
+		if ( is_search() ) {
+			$sc = new JuxtaLearn_Hub_Shortcode_Example_Meta();
+
+			$content =
+			    '<div class=entry-type >'.
+			    ucwords(str_replace('_', ' ', $post->post_type)) .'</div>'.
+				$post->post_content .
+				$sc->meta_bar((array) $post, 'sb, subject, country', TRUE);
+
+			// maybe add a read more link
+			// also, you can use global $post to access the current search result
+		}
+		return $content;
+	}
+
+
+	/**NDF: Stumbling Block tags widget [#5] [#10].
+	 */
+	public function custom_sb_meta_box( $post, $box ) {
+		// ?tags-ui=classic|wordpress|wp
+		if (isset($_GET['tags-ui']) && preg_match('/^(c|w)/', $_GET['tags-ui'])):
+			post_tags_meta_box($post, $box);
+		else:
+		?><pre><?php
+			#var_dump($this->options);
+		?></pre>
+		<div class=tagsdiv id=juxtalearn_hub_sb ><!--HACK: -->
+		<div class="ajaxtag hide-if-no-js">
+		  <label class=screen-reader-text for="new-tag-juxtalearn_hub_sb"><?php
+		        echo __('Stumbling Blocks', self::LOC_DOMAIN) ?></label>
+		  <div class=taghint ><?php
+		        echo __('Add New Stumbling Block', self::LOC_DOMAIN) ?></div>
+		  <p><input id=new-tag-juxtalearn_hub_sb name="newtag[juxtalearn_hub_sb]" class="newtag form-input-tip" size="16" autocomplete="off" value="">
+		  <input type=button class="button tagadd-cust" value="<?php
+		        echo __('Add', self::LOC_DOMAIN) ?>"></p>
+	    </div>
+			<input type=hidden id=custom-sb-meta-box-type value=check />
+			<div id=juxtalearn_hub_sb_custom >
+		<?php
+			$nm = '__tax_input[juxtalearn_hub_sb][]';
+			$term_list = wp_get_post_terms($post->ID, 'juxtalearn_hub_sb',
+				array('fields'=>'names'));
+			foreach ($term_list as $tm):
+				?><label><input type=checkbox checked name="<?php echo $nm ?>"
+					value="<?php echo $tm ?>"><?php echo $tm ?></label> <?php
+			endforeach;
+		?></div></div><?php
+		endif;
+	}
+
 }

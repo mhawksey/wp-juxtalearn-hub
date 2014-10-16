@@ -78,6 +78,12 @@ text-align:left;
 #fullscreen-button { 
 	text-align: right;
 }
+#fullscreen-button .el-icon-fullscreen:before {
+	display: inline-block;
+	text-decoration: none;
+	padding-right: 4px;
+	vertical-align: middle;
+}
 .leaflet-popup .popt{
 	display: table
 }
@@ -185,14 +191,93 @@ blockquote {
 
 /* Internet Explorer <= 8 message.
 */
-.map-no-js {
+.jl-chart-no-js, .map-no-js {
   text-align: center;
   font-size: 1.2em;
-  border: 1px solid #bbb;
-  background: #f6f6f6;
-  padding: 5px;
+  border: 1px solid orange;
+  background: #fff6f6;
+  padding: 2px;
+  margin: 1em 0;
 }
-.ie8 #juxtalearn-map #loading {
+.ie8 #juxtalearn-map #loading,
+.ie8 .jl-chart-loading,
+.jl-chart-loading.hide {
   display: none;
 }
 
+/* MSIE 9+ */
+[data-ua *= "MSIE"].not-ie #juxtalearn-map > svg {
+  min-height: 530px;
+  overflow: hidden;
+}
+[data-ua *= "MSIE 10"] #fullscreen-button {
+  display: none;
+}
+
+
+/* Error style: wp-jux..-hub/css/admin.css#.ui-state-error */
+.jl-error-msg {
+  border: 1px solid #cd0a0a;
+  color: #cd0a0a;
+  padding: 3px;
+  text-align: center;
+}
+
+/* Shortcodes. */
+.jxl-shortcode #content > article > .entry-meta,
+.jxl-shortcode #content > article > .entry-meta .post-edit-link {
+  x-color: red;
+  display: none;
+}
+
+
+/* Facetious search widget.
+*/
+.facetious_post_type [value=post],
+.facetious_post_type [value=page],
+.facetious_post_type [value=attachment],
+.facetious_post_type [value=location] {
+  display: none;
+}
+.debug .facetious_post_type [value=post],
+.debug .facetious_post_type [value=page],
+.debug .facetious_post_type [value=attachment],
+.debug .facetious_post_type [value=location] {
+  color: #999;
+  display: block;
+}
+
+
+/* Search results.
+*/
+/*.search-results article .entry-title:after {
+  color: #8DC919;
+  font-size: medium;
+  float: right;
+}
+.search-results article .entry-summary {
+  clear: right;
+}
+.search-results .type-student_problem .entry-title:after {
+  content: "Student Problem";
+}
+.search-results .type-tricky_topic .entry-title:after {
+  content: "Tricky Topic";
+}
+.search-results .type-teaching_activity .entry-title:after {
+  content: "Teaching Activity";
+}*/
+.search-results .entry-type {
+  position: relative;
+  top: -80px;
+  text-align: right;
+  color: #8DC919;
+  font-size: medium;
+  height: 2px;
+}
+.search-results .entry-header {
+  margin-bottom: 10px;
+}
+.search-results .site-content article {
+  margin-bottom: 1.8rem;
+}

@@ -111,17 +111,17 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
 		var data = <?php echo json_encode($data);?>;
 		/* ]]> */
 		</script>
-        <script src="<?php echo plugins_url( 'lib/map/lib/queue.v1.min.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" type="text/javascript" charset="utf-8"></script>
-        <script src="<?php echo plugins_url( 'lib/map/lib/topojson.v1.min.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" type="text/javascript" charset="utf-8"></script>
-        <script src="<?php echo plugins_url( 'lib/map/lib/colorbrewer.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" type="text/javascript" charset="utf-8"></script>
-        <script src="<?php echo plugins_url( 'lib/map/lib/mootools-core-1.4.5.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" type="text/javascript" charset="utf-8"></script>
-        <script src="<?php echo plugins_url( 'lib/map/lib/mootools-more-1.4.0.1.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" type="text/javascript" charset="utf-8"></script>
+        <script src="<?php echo plugins_url( 'lib/map/lib/queue.v1.min.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" charset="utf-8"></script>
+        <script src="<?php echo plugins_url( 'lib/map/lib/topojson.v1.min.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" charset="utf-8"></script>
+        <script src="<?php echo plugins_url( 'lib/map/lib/colorbrewer.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" charset="utf-8"></script>
+        <script src="<?php echo plugins_url( 'lib/map/lib/mootools-core-1.4.5.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" charset="utf-8"></script>
+        <script src="<?php echo plugins_url( 'lib/map/lib/mootools-more-1.4.0.1.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" charset="utf-8"></script>
 		
-        <script src="<?php echo plugins_url( 'lib/map/src/control.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" type="text/javascript" charset="utf-8"></script>
-        <script src="<?php echo plugins_url( 'js/sankey.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" type="text/javascript" charset="utf-8"></script>
+        <script src="<?php echo plugins_url( 'lib/map/src/control.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" charset="utf-8"></script>
+        <script src="<?php echo plugins_url( 'js/sankey.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" charset="utf-8"></script>
         
-        <link rel="stylesheet" type="text/css" href="<?php echo plugins_url( 'lib/map/css/skeleton.css' , JUXTALEARN_HUB_REGISTER_FILE )?>" />
-        <link rel="stylesheet" type="text/css" href="<?php echo plugins_url( 'lib/map/css/styles.css' , JUXTALEARN_HUB_REGISTER_FILE )?>" />
+        <link rel="stylesheet" href="<?php echo plugins_url( 'lib/map/css/skeleton.css' , JUXTALEARN_HUB_REGISTER_FILE )?>" />
+        <link rel="stylesheet" href="<?php echo plugins_url( 'lib/map/css/styles.css' , JUXTALEARN_HUB_REGISTER_FILE )?>" />
         <!--[if gte IE 7]>
            <style>svg { height: 450px }</style>
         <![endif]-->
@@ -146,18 +146,17 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
           <div id="juxtalearn-map">
 
 <!--[if lte IE 8]>
-            <div class=map-no-js >
+            <div class="jl-chart-no-js">
               <p>Unfortunately, the map doesn't work in older browsers. Please <a
                 href="http://whatbrowser.org/">try a different browser</a>.</p>
             </div>
 <![endif]-->
 
-                <div id="loading">
-                    Loading map...
-                </div>
+                <div id="loading" class="jl-chart-loading"><?php
+                    echo __('Loading map...', self::LOC_DOMAIN) ?></div>
 
             <header>
-                <h1>OER Research Hub - Example Map</h1>
+                <h1><?php echo __('JuxtaLearn - Example Map', self::LOC_DOMAIN) ?></h1>
             </header>
             <div id="impressum">
                 <small>
@@ -179,19 +178,22 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
             </div>
 		  </div>
         
-        <script type="text/javascript">
+        <script>
             window.addEvent('domready', function() {
-                init();
+                window.init && init();
                 //constructControlPanel('Global Oil Production & Consumption');
                 
             });
         </script>
-        <div id="fullscreen-button"><a href="#" id="juxtalearn-map-fullscreen">Full Screen</a></div>
-		<script src="<?php echo plugins_url( 'lib/map/lib/bigscreen.min.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" type="text/javascript" charset="utf-8"></script>
+        <div id="fullscreen-button"><a href="#" id="juxtalearn-map-fullscreen"><span class="el-icon-fullscreen"></span>Full Screen</a></div>
+		<script src="<?php echo plugins_url( 'lib/map/lib/bigscreen.min.js' , JUXTALEARN_HUB_REGISTER_FILE )?>" charset="utf-8"></script>
 		<script>
+		jQuery(function () {
+
 		var element = document.getElementById('juxtalearn-map');
 
-		document.getElementById('juxtalearn-map-fullscreen').addEventListener('click', function() {
+		jQuery('#juxtalearn-map-fullscreen').on('click', function () {
+		//document.getElementById('juxtalearn-map-fullscreen').addEventListener('click', function() {
 			if (BigScreen.enabled) {
 				BigScreen.request(element, onEnterJuxtaLearnMap, onExitJuxtaLearnMap);
 				// You could also use .toggle(element, onEnter, onExit, onError)
@@ -199,7 +201,8 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
 			else {
 				// fallback for browsers that don't support full screen
 			}
-		}, false);
+		//}, false);
+		});
 		
 			// called when the first element enters full screen
 		
@@ -213,6 +216,8 @@ class JuxtaLearn_Hub_Shortcode_Example_Map extends JuxtaLearn_Hub_Shortcode {
 			jQuery('#juxtalearn-map').css('height','');
 			jQuery('#ui').hide();
 		}
+
+		});
 		</script>
 		<?php
 		return ob_get_clean();

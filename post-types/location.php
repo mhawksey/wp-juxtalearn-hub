@@ -39,7 +39,7 @@ class Location_Template extends Juxtalearn_Hub_CustomPostType
 					'not_found_in_trash' => __(sprintf('No found in Trash%s', $this->plural)),
 				),
 				'public' => true,
-				'description' => __("An example of a Student Problem"),
+				'description' => __('An example of a Student Problem', self::LOC_DOMAIN),
 				'supports' => array(
 					'title', 'editor', 'excerpt', 'author' 
 				),
@@ -65,7 +65,7 @@ class Location_Template extends Juxtalearn_Hub_CustomPostType
 				'type' => 'select',
 				'save_as' => 'term',
 				'position' => 'side',
-				'label' => "Country",
+				'label' => __('Country', self::LOC_DOMAIN),
 				'options' => get_terms('juxtalearn_hub_country', 'hide_empty=0'),
 				),
 			));
