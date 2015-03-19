@@ -14,8 +14,10 @@ Based on Version: 1.0
 Based on Author: Francis Yaconiello
 Based on Author URI: http://www.yaconiello.com
 */
+
+
 /*
-Copyright 2014  Martin Hawksey  (email : m.hawksey@gmail.com)
+Copyright 2014-15 The Open University (http://www.open.ac.uk)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License, version 2, as 
