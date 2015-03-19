@@ -64,7 +64,8 @@
 							name="<?php echo $name; ?>_field"
 							id="<?php echo $name; ?>_field"
 							value="<?php if ($value) { echo get_the_title($value);} ?>"
-                            placeholder="Start typing a <?php echo $option['type'];?>"
+                            placeholder="<?php echo
+                              __('Start typing a location', self::LOC_DOMAIN) ?>"
 						/><?php if ($option['descr']){?>
                         <span class="description"><?php echo $option['descr'] ?></span>
                         <?php } ?>
@@ -83,6 +84,10 @@
 									$latLong[0] = get_post_meta($value, '_pronamic_google_maps_latitude', true );
 									$latLong[1] = get_post_meta($value, '_pronamic_google_maps_longitude', true );
 									$zoom = get_post_meta($value, '_pronamic_google_maps_zoom', true );
+									$zoom = $zoom ? $zoom : 13;
+									if ('' == $latLong[ 0 ]) {
+										$latLong = array( 0, 0 );
+									}
 									/*$maphtml = '<div id="MapHolder" style="height:260px"></div><script>var map = L.map("MapHolder").setView([0, 0], 13);
 									L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {attribution: "&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"}).addTo(map);
 									var marker = L.marker([0, 0]).addTo(map);</script>';*/
@@ -171,14 +176,17 @@
 						/>
                      <?php } else if ($option['type'] == 'add_link') { ?>
 						<?php if (isset($_GET['post'])) { 
-								printf( __( '<a href="post-new.php?post_type=student_problem&tt_id=%s">Add an example</a>' ), $post_id );
+							printf( '<a href="post-new.php?post_type=student_problem&tt_id=%s">', $post_id );
+							echo __( 'Add an example', 'self::LOC_DOMAIN' ) . '</a>';
 						} else {
-								echo "Save/Publish to add an example";	
+								echo __('Save/Publish to add an example', self::LOC_DOMAIN);	
 						}
                         ?>
                      <?php } else if ($option['type'] == 'add_another_link') { ?>
-						
-								<?php printf( __( '<a href="post-new.php?post_type=student_problem&tt_id=%s">Add another example</a>' ), $_GET['tt_id'] ); ?>
+							<?php
+							$tt_id = isset($_GET['tt_id']) ? $_GET['tt_id'] : NULL;
+							printf( '<a href="post-new.php?post_type=student_problem&tt_id=%s">', $tt_id );
+							echo __( 'Add another example', self::LOC_DOMAIN ) .'</a>'; ?>
 						
                         
 					<?php } else echo 'unknown option type '.$option['type']; ?>

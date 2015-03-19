@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP JuxtaLearn Hub
 Plugin URI: https://github.com/mhawksey/wp-juxtalearn-hub
-Description: TODO
+Description: Plugin to capture and visualise evidence around a set of hypotheses. Developed for the JuxtaLearn project. (Forked from 'IET-OU/wp-evidence-hub')
 Version: 0.1
 Author: Martin Hawksey
 Author URI: http://mashe.hawksey.info
@@ -14,8 +14,10 @@ Based on Version: 1.0
 Based on Author: Francis Yaconiello
 Based on Author URI: http://www.yaconiello.com
 */
+
+
 /*
-Copyright 2014  Martin Hawksey  (email : m.hawksey@gmail.com)
+Copyright 2014-15 The Open University (http://www.open.ac.uk)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License, version 2, as 
@@ -45,6 +47,8 @@ if(!class_exists('JuxtaLearn_Hub'))
 {
 	class JuxtaLearn_Hub
 	{
+		const LOC_DOMAIN = 'juxtalearn-hub';
+
 		static $post_types = array(); 
 		
 		/**
@@ -81,6 +85,10 @@ if(!class_exists('JuxtaLearn_Hub'))
 			require_once(sprintf("%s/shortcodes/subject_summary.php", JUXTALEARN_HUB_PATH));
 			$subject_summary = new JuxtaLearn_Hub_Shortcode_Subject_Summary();
 
+
+			#require_once(sprintf(
+			#	"%s/shortcodes/juxtalearn_taxonomy.php", JUXTALEARN_HUB_PATH));
+			#$jxl_taxonomy = new JuxtaLearn_Taxonomy_Shortcode();
 
 			// Initialize Pronamics Google Maps distro
 			if (!class_exists('Pronamic_Google_Maps_Maps')){
@@ -386,17 +394,17 @@ if(!class_exists('JuxtaLearn_Hub'))
     	*/
 		public static function get_taxonomy_args($tax_single, $tax_plural, $custom_slug = false){
 			$labels = array(
-				'name'                => sprintf( _x( '%s', 'taxonomy general name', 'juxtalearn_hub' ), $tax_plural ),
-			    'singular_name'       => sprintf( _x( '%s', 'taxonomy singular name', 'juxtalearn_hub' ), $tax_single ),
-			    'search_items'        => sprintf( __( 'Search %s', 'juxtalearn_hub' ), $tax_plural ),
-			    'all_items'           => sprintf( __( 'All %s', 'juxtalearn_hub' ), $tax_plural ),
-			    'parent_item'         => sprintf( __( 'Parent %s', 'juxtalearn_hub' ), $tax_single ),
-			    'parent_item_colon'   => sprintf( __( 'Parent %s:', 'juxtalearn_hub' ), $tax_single ),
-			    'edit_item'           => sprintf( __( 'Edit %s', 'juxtalearn_hub' ), $tax_single ),
-			    'update_item'         => sprintf( __( 'Update %s', 'juxtalearn_hub' ), $tax_single ),
-			    'add_new_item'        => sprintf( __( 'Add New %s', 'juxtalearn_hub' ), $tax_single ),
-			    'new_item_name'       => sprintf( __( 'New %s Name', 'juxtalearn_hub' ), $tax_single ),
-			    'menu_name'           => sprintf( __( '%s', 'juxtalearn_hub' ), $tax_plural )
+				'name'                => sprintf( _x( '%s', 'taxonomy general name', self::LOC_DOMAIN ), $tax_plural ),
+			    'singular_name'       => sprintf( _x( '%s', 'taxonomy singular name', self::LOC_DOMAIN ), $tax_single ),
+			    'search_items'        => sprintf( __( 'Search %s', self::LOC_DOMAIN ), $tax_plural ),
+			    'all_items'           => sprintf( __( 'All %s', self::LOC_DOMAIN ), $tax_plural ),
+			    'parent_item'         => sprintf( __( 'Parent %s', self::LOC_DOMAIN ), $tax_single ),
+			    'parent_item_colon'   => sprintf( __( 'Parent %s:', self::LOC_DOMAIN ), $tax_single ),
+			    'edit_item'           => sprintf( __( 'Edit %s', self::LOC_DOMAIN ), $tax_single ),
+			    'update_item'         => sprintf( __( 'Update %s', self::LOC_DOMAIN ), $tax_single ),
+			    'add_new_item'        => sprintf( __( 'Add New %s', self::LOC_DOMAIN ), $tax_single ),
+			    'new_item_name'       => sprintf( __( 'New %s Name', self::LOC_DOMAIN ), $tax_single ),
+			    'menu_name'           => sprintf( __( '%s', self::LOC_DOMAIN ), $tax_plural )
 				
 			);
 		

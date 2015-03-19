@@ -56,7 +56,18 @@ class JuxtaLearn_Hub_Shortcode_Tricky_Topic_Summary extends JuxtaLearn_Hub_Short
                     Summary 
                 <?php } else echo $title; ?>
             </<?php echo $title_tag; ?>>
-         <div id="sankey-chart"></div>
+		<div id="sankey-chart">
+
+<!--[if lte IE 8]>
+			<div class="jl-chart-no-js">
+			<p>Unfortunately, the chart doesn't work in older browsers. Please <a
+			href="http://whatbrowser.org/">try a different browser</a>.
+			</div>
+<![endif]-->
+			<div id="loading" class="jl-chart-loading"><?php
+				echo __('Loading chart...', self::LOC_DOMAIN) ?></div>
+
+		</div>
 		<?php
 		$args = array('post_type' => array('student_problem','teaching_activity'), // my custom post type
     				   'posts_per_page' => -1,
@@ -97,12 +108,12 @@ class JuxtaLearn_Hub_Shortcode_Tricky_Topic_Summary extends JuxtaLearn_Hub_Short
      * @return array Get array of links.
      */
     function print_get_nodes_links($hposts, &$nodes, $post_id) {
-        $base_link = get_permalink();
+        $base_link = home_url() .'/';
         $links = array();
         $nodesList = array();
 		$hposts_title = get_the_title($post_id);
 			
-		$nodes[] = array("name" => $hposts_title, "url" => $base_link, "id" => $post_id, "type" => "trickytopic" );
+		$nodes[] = array("name" => $hposts_title, "url" => get_permalink(), "id" => $post_id, "type" => "trickytopic" );
 
         // get polarity and sector terms
 			$posttypes = array('student_problem','teaching_activity');

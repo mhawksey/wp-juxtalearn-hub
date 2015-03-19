@@ -114,7 +114,16 @@ class TrickyTopic_Template extends Juxtalearn_Hub_CustomPostType
 		remove_meta_box('tagsdiv-juxtalearn_hub_subject',$this->post_type,'side');
 		remove_meta_box('tagsdiv-juxtalearn_hub_sb',$this->post_type,'side');
 		remove_meta_box('tagsdiv-juxtalearn_hub_country',$this->post_type,'side');
-		add_meta_box( 'tagsdiv-juxtalearn_hub_sb', 'Stumbling Blocks', 'post_tags_meta_box', $this->post_type, 'side', 'low', array( 'taxonomy' => 'juxtalearn_hub_sb' ));				
+		//NDF: [#5] [#10]
+		add_meta_box(
+			'tagsdiv-juxtalearn_hub_sb',
+			__('Stumbling Blocks', self::LOC_DOMAIN),
+			array(&$this, 'custom_sb_meta_box'), #'post_tags_meta_box'
+			$this->post_type,
+			'side',
+			'low',
+			array( 'taxonomy' => 'juxtalearn_hub_sb' )
+		);
 	} // END public function add_meta_boxes()
 			
 	public function custom_post_type_link($post_link, $post = 0, $leavename = false) {		
