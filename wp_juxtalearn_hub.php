@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP JuxtaLearn Hub
 Plugin URI: https://github.com/mhawksey/wp-juxtalearn-hub
-Description: TODO
+Description: Plugin to capture and visualise evidence around a set of hypotheses. Developed for the JuxtaLearn project. (Forked from 'IET-OU/wp-evidence-hub')
 Version: 0.1
 Author: Martin Hawksey
 Author URI: http://mashe.hawksey.info

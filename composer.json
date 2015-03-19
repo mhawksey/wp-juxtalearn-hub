@@ -1,0 +1,23 @@
+{
+  "name": "iet-ou/wp-juxtalearn-hub",
+  "type": "wordpress-plugin",
+  "description": "WordPress plugin to capture and visualise evidence around a set of hypotheses. Developed for the JuxtaLearn project. (Forked from 'IET-OU/wp-evidence-hub') ©2015 The Open University, UK.",
+  "keywords": [ "JuxtaLearn", "TrickyTopic", "OpenUniversity", "IET-OU" ],
+  "homepage": "http://trickytopic.juxtalearn.net/",
+  "license": "GPL-2.0+",
+  "time": "2014-01-17",
+  "minimum-stability": "dev",
+  "authors": [
+    { "name": "Martin Hawksey (@mhawksey)", "role": "original developer" },
+    { "name": "Nick Freear (@nfreear)", "role": "developer", "homepage": "http://iet.open.ac.uk" },
+    { "name": "Gill Clough", "role": "lead researcher" }
+  ],
+  "support": {
+    "email": "iet-webmaster@open.ac.uk",
+    "source": "https://github.com/IET-OU/wp-juxtalearn-hub"
+  },
+  "require": {
+    "php": ">=5.3.3",
+    "composer/installers": "~1.0"
+  }
+}
